@@ -1,28 +1,31 @@
-﻿// See https://aka.ms/new-console-template for more information
-using projektowanie;
+﻿using projektowanie;
+using System.IO;
 using System.Text.Json;
 public class Program
 {
-    public static void Main()
-    { 
-        ObjectParser parser = new FTRtoObject();
+    public static void ReadFTRPaths(out string? path, out string? outpath)
+    {
         Console.WriteLine("Podaj nazwę pliku (musi znajdować się w tym samym pliku co .exe)");
-        string? path;
         path = Console.ReadLine();
-        string? outpath;
-        var objects = parser.Generate(path);
         Console.WriteLine("Podaj nazwę pliku do zapisu ");
         outpath = Console.ReadLine();
+    }
+    public static void Main()
+    {
+        string? path, outpath;
+        ReadFTRPaths(out path, out outpath);
+        ObjectParser parser = new FTRtoObject();
+        var objects = parser.Generate(path);
         StreamWriter sw = new StreamWriter(outpath);
         ISerializer jsons = new JSONSerializer();
         foreach (string k in objects.Keys)
         {
-             foreach (var e in objects[k])
-             {
-                 jsons.SerializeToFile(sw, e);
-             }
-         }
-         sw.Close();
+            foreach (var e in objects[k])
+            {
+                jsons.SerializeToFile(sw, e);
+            }
+        }
+        sw.Close();
 
     }
 }

@@ -46,9 +46,9 @@ namespace projektowanie
             generators.Add("PP", new PassengerPlaneGenerator());
             generators.Add("AI", new AirportGenerator());
             generators.Add("FL", new FlightGenerator());
-            
+
         }
 
-        
+
     }
 }

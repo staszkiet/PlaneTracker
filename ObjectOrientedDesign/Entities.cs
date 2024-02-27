@@ -46,7 +46,7 @@ namespace projektowanie
             this.MaxLoad = MaxLoad;
         }
 
-         [JsonPropertyOrder(1)]
+        [JsonPropertyOrder(1)]
         public float MaxLoad { get; init; }
     }
 
@@ -61,7 +61,7 @@ namespace projektowanie
         [JsonPropertyOrder(1)]
         public ushort EconomyClassSize { get; init; }
         public PassengerPlane(ulong ID, string Serial, string Country, string Model, ushort FirstClassSize, ushort BusinessClassSize, ushort EconomyClassSize) : base(ID, Serial, Country, Model)
-        { 
+        {
             this.FirstClassSize = FirstClassSize;
             this.EconomyClassSize = EconomyClassSize;
             this.BusinessClassSize = BusinessClassSize;
@@ -77,7 +77,7 @@ namespace projektowanie
         public float Latitude { get; init; }
         public float AMSL { get; init; }
         public string Country { get; init; }
-        public Airport(ulong ID, string Name , string Code, float Longitude, float Latitude, float AMSL, string Country)
+        public Airport(ulong ID, string Name, string Code, float Longitude, float Latitude, float AMSL, string Country)
         {
             this.ID = ID;
             this.Name = Name;
@@ -132,6 +132,8 @@ namespace projektowanie
         {
             ID = iD;
             Name = name;
+
+
             Age = age;
             Phone = phone;
             Email = email;
@@ -169,7 +171,7 @@ namespace projektowanie
         }
     }
 
-     public class Cargo : IEntity
+    public class Cargo : IEntity
     {
         public ulong ID { get; init; }
         public float Weight { get; init; }
