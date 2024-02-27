@@ -4,8 +4,9 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using ObjectOrientedDesign.Objects;
 
-namespace projektowanie
+namespace ObjectOrientedDesign
 {
     public interface ObjectParser
     {

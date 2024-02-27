@@ -9,8 +9,9 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using ObjectOrientedDesign.Objects;
 
-namespace projektowanie
+namespace ObjectOrientedDesign
 {
     public interface IGenerator
     {
