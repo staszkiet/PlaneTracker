@@ -1,4 +1,6 @@
 ﻿using ObjectOrientedDesign;
+using ObjectOrientedDesign.Objects;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 public class Program
@@ -7,25 +9,42 @@ public class Program
     {
         Console.WriteLine("Podaj nazwę pliku (musi znajdować się w tym samym pliku co .exe)");
         path = Console.ReadLine();
-        Console.WriteLine("Podaj nazwę pliku do zapisu ");
+        Console.WriteLine("Podaj nazwę pliku do zapisu (w przypadku źródła TCP podaj cokolwiek)");
         outpath = Console.ReadLine();
+    }
+
+    public static void ParseTCP(string path)
+    {
+        List<IEntity> list = new List<IEntity>();
+        TCPtoObject parser = new TCPtoObject(path);
+        string s = "";
+        string outpath;
+        while (String.Compare(s, "exit") != 0)
+        {
+            s = Console.ReadLine();
+            if (s == "print")
+            {
+                outpath = $"snapshot_{DateTime.Now.Hour}_{DateTime.Now.Minute}_{DateTime.Now.Second}.json";
+
+                list = parser.Generate();
+                ISerializer jsons = new JSONSerializer();
+                jsons.SerializeToFile(outpath, list);
+            }
+        }
+    }
+    public static void ParseFTR(string path, string outpath)
+    {
+        List<IEntity> list = new List<IEntity>();
+        FTRtoObject parser = new FTRtoObject(path);
+
+        list = parser.Generate();
+        ISerializer jsons = new JSONSerializer();
+        jsons.SerializeToFile(outpath, list);
     }
     public static void Main()
     {
         string? path, outpath;
         ReadFTRPaths(out path, out outpath);
-        ObjectParser parser = new FTRtoObject();
-        var objects = parser.Generate(path);
-        StreamWriter sw = new StreamWriter(outpath);
-        ISerializer jsons = new JSONSerializer();
-        foreach (string k in objects.Keys)
-        {
-            foreach (var e in objects[k])
-            {
-                jsons.SerializeToFile(sw, e);
-            }
-        }
-        sw.Close();
-
+        ParseTCP(path);
     }
 }

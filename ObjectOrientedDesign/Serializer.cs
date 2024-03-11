@@ -9,16 +9,18 @@ namespace ObjectOrientedDesign
 {
     public interface ISerializer
     {
-        void SerializeToFile(StreamWriter sw, object obj);
+        void SerializeToFile(string outpath, object obj);
     }
 
     public class JSONSerializer : ISerializer
     {
-        public void SerializeToFile(StreamWriter sw, object obj)
+        public void SerializeToFile(string outpath, object obj)
         {
+            StreamWriter sw = new StreamWriter(outpath);
             string help;
             help = JsonSerializer.Serialize(obj);
             sw.Write(help);
+            sw.Close();
         }
     }
 }
