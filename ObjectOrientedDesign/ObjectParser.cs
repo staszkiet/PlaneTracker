@@ -57,7 +57,6 @@ namespace ObjectOrientedDesign
         public NetworkSourceSimulator.NetworkSourceSimulator nss;
         public List<Byte[]> bytes;
         private static Mutex mut = new Mutex();
-        Thread thread;
 
         CancellationTokenSource cts = new CancellationTokenSource();
         public List<IEntity> Generate() // z tablicy bajtów robimy listę (serializacja w mainie)
@@ -87,7 +86,7 @@ namespace ObjectOrientedDesign
             bytes = new List<byte[]>();
             nss = new NetworkSourceSimulator.NetworkSourceSimulator(path, 0, 10);
             nss.OnNewDataReady += reader;
-            Task task = new Task(()=> { nss.Run(); });
+            Task task = new Task(() => { nss.Run(); });
             task.Start();
         }
         public void reader(object sender, NewDataReadyArgs ndra)

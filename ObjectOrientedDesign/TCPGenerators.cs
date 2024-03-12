@@ -105,7 +105,7 @@ namespace ObjectOrientedDesign
         {
             ulong ID = BitConverter.ToUInt64(bytes[0..8]);
             string serial = System.Text.Encoding.ASCII.GetString(bytes[8..18]);
-            serial =  serial.Replace("\0", String.Empty);
+            serial = serial.Replace("\0", String.Empty);
             string country = System.Text.Encoding.ASCII.GetString(bytes[18..21]);
             ushort model_length = BitConverter.ToUInt16(bytes[21..23]);
             string model = System.Text.Encoding.ASCII.GetString(bytes[23..(23 + model_length)]);
@@ -149,7 +149,7 @@ namespace ObjectOrientedDesign
             string la = Landing.ToString();
             ulong PlaneID = BitConverter.ToUInt64(bytes[40..48]);
             ushort crewcount = BitConverter.ToUInt16(bytes[48..50]);
-            ulong [] crew = new ulong[crewcount];
+            ulong[] crew = new ulong[crewcount];
             int lastp = 50;
             for (int i = 0; i < crewcount; i++)
             {
@@ -164,9 +164,9 @@ namespace ObjectOrientedDesign
                 lastp += 8;
             }
 
-            return new Flight(ID, Origin, Target, to, la, 0, 0, 0, PlaneID, crew, passenger);
+            return new Flight(ID, Origin, Target, to, la, null, null, null, PlaneID, crew, passenger);
         }
-       
+
 
     }
 }
