@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ObjectOrientedDesign.Objects
 {
-    public abstract class Person : IEntity
+    public abstract class Person : Entity
     {
         public ulong ID { get; init; }
         public string Name { get; init; }

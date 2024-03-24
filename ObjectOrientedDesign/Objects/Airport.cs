@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ObjectOrientedDesign.Objects
 {
-    public class Airport : IEntity
+    public class Airport : Entity
     {
         public ulong ID { get; init; }
         public string Name { get; init; }

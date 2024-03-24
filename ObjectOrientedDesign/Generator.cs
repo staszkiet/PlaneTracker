@@ -13,13 +13,13 @@ using ObjectOrientedDesign.Objects;
 
 namespace ObjectOrientedDesign
 {
-    public interface IGenerator
+    public abstract class Generator
     {
-        public IEntity Generate(string[] s);
+        public abstract Entity Generate(string[] s);
     }
-    public class CrewGenerator : IGenerator
+    public class CrewGenerator : Generator
     {
-        public IEntity Generate(string[] s)
+        public override Crew Generate(string[] s)
         {
             ulong ID = ulong.Parse(s[1]);
             string Name = s[2];
@@ -33,9 +33,9 @@ namespace ObjectOrientedDesign
 
     }
 
-    public class PassengerGenerator : IGenerator
+    public class PassengerGenerator : Generator
     {
-        public IEntity Generate(string[] s)
+        public override Passenger Generate(string[] s)
         {
             ulong ID = ulong.Parse(s[1]);
             string Name = s[2];
@@ -49,9 +49,9 @@ namespace ObjectOrientedDesign
 
     }
 
-    public class CargoGenerator : IGenerator
+    public class CargoGenerator : Generator
     {
-        public IEntity Generate(string[] s)
+        public override Cargo Generate(string[] s)
         {
             ulong ID = ulong.Parse(s[1]);
             float Weight = float.Parse(s[2], CultureInfo.InvariantCulture);
@@ -61,9 +61,9 @@ namespace ObjectOrientedDesign
         }
     }
 
-    public class CargoPlaneGenerator : IGenerator
+    public class CargoPlaneGenerator : Generator
     {
-        public IEntity Generate(string[] s)
+        public override CargoPlane Generate(string[] s)
         {
             ulong ID = uint.Parse(s[1]);
             string Serial = s[2];
@@ -73,9 +73,9 @@ namespace ObjectOrientedDesign
             return new CargoPlane(ID, Serial, Country, Model, MaxLoad);
         }
     }
-    public class PassengerPlaneGenerator : IGenerator
+    public class PassengerPlaneGenerator : Generator
     {
-        public IEntity Generate(string[] s)
+        public override PassengerPlane Generate(string[] s)
         {
             ulong ID = uint.Parse(s[1]);
             string Serial = s[2];
@@ -89,9 +89,9 @@ namespace ObjectOrientedDesign
         }
     }
 
-    public class AirportGenerator : IGenerator
+    public class AirportGenerator : Generator
     {
-        public IEntity Generate(string[] s)
+        public override Airport Generate(string[] s)
         {
             ulong ID = ulong.Parse(s[1]);
             string Name = s[2];
@@ -104,9 +104,9 @@ namespace ObjectOrientedDesign
         }
     }
 
-    public class FlightGenerator : IGenerator
+    public class FlightGenerator : Generator
     {
-        public IEntity Generate(string[] s)
+        public override Flight Generate(string[] s)
         {
             ulong ID = ulong.Parse(s[1]);
             ulong Origin = ulong.Parse(s[2]);

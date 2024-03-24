@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ObjectOrientedDesign.Objects
 {
-    public abstract class Plane : IEntity
+    public abstract class Plane : Entity
     {
         protected Plane(ulong iD, string? serial, string? country, string? model)
         {

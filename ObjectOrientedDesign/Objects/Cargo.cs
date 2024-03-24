@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ObjectOrientedDesign.Objects
 {
-    public class Cargo : IEntity
+    public class Cargo : Entity
     {
         public ulong ID { get; init; }
         public float Weight { get; init; }

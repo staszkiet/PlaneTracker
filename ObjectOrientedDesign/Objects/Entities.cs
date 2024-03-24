@@ -18,7 +18,7 @@ namespace ObjectOrientedDesign.Objects
     [JsonDerivedType(typeof(Passenger), "P")]
     [JsonDerivedType(typeof(Flight), "FL")]
     [JsonDerivedType(typeof(Cargo), "CA")]
-    public interface IEntity
+    public abstract class Entity
     {
 
     }
