@@ -165,7 +165,7 @@ namespace ObjectOrientedDesign
                 lastp += 8;
             }
             
-            return new Flight(ID, Origin, Target, to, la, 0, 0, null, PlaneID, crew, passenger);
+            return new Flight(ID, Origin, Target, to, la, int.MaxValue, int.MaxValue, null, PlaneID, crew, passenger);
         }
 
 

@@ -14,12 +14,14 @@ namespace ObjectOrientedDesign
     {
         private Flight f;
 
-        public FlightAdapter(Flight fl, double lattitude, double longitude, double degree)
+        public FlightAdapter(Flight fl, float lattitude, float longitude, double degree)
         {
             f = fl;
             this.ID = fl.ID;
             this.WorldPosition = new WorldPosition(lattitude, longitude);
             this.MapCoordRotation = degree;
+            f.Latitude = lattitude;
+            f.Longitude = longitude;
         }
 
     }

@@ -13,9 +13,11 @@ using ObjectOrientedDesign.Objects;
 using System.Numerics;
 using HarfBuzzSharp;
 using System.Xml;
+using System.Reflection.Metadata;
 
 namespace ObjectOrientedDesign
 {
+    public delegate void UpdateDel();
     public interface ObjectParser
     {
         List<Entity> Generate();
@@ -26,6 +28,8 @@ namespace ObjectOrientedDesign
         {
             get;
         }
+
+        public event UpdateDel? OnUpdate;
     }
 
     public class FTRtoObject : ObjectParser
@@ -38,6 +42,8 @@ namespace ObjectOrientedDesign
             get;
             init;
         }
+
+        public event UpdateDel? OnUpdate;
         public List<Entity> Generate()
         {
             List<Entity> l = new List<Entity>();
@@ -114,7 +120,7 @@ namespace ObjectOrientedDesign
         public NetworkSourceSimulator.NetworkSourceSimulator nss;
         public Dictionary<string, List<byte[]>> bytes;
         private static Mutex mut = new Mutex();
-
+        public event UpdateDel? OnUpdate;
         public string outpath
         {
             get
@@ -201,6 +207,7 @@ namespace ObjectOrientedDesign
             mut.WaitOne();
             this.bytes[ret].Add(m.MessageBytes);
             mut.ReleaseMutex();
+            this.OnUpdate?.Invoke();
         }
     }
 }
