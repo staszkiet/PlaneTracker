@@ -20,7 +20,7 @@ namespace ObjectOrientedDesign
             long landingticks = landing.Ticks;
             if (takeoffticks > landingticks)
             {
-                landing.AddDays(1);
+                landing = landing.AddDays(1);
                 landingticks = landing.Ticks;
             }
             if (takeoffticks < nowticks && landingticks > nowticks)
