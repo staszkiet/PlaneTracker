@@ -27,8 +27,6 @@ namespace ObjectOrientedDesign
             {
                 float l = (float)(nowticks - takeoffticks) / (landingticks - takeoffticks);
                 float k = (float)(nowticks - takeoffticks) / (landingticks - takeoffticks);
-                //    float NewLatitude = origin.Latitude + l * (dest.Latitude - origin.Latitude);
-                //    float NewLongitude = origin.Longitude + k * (dest.Longitude - origin.Longitude);
                 float NewLatitude = Single.Lerp(origin.Latitude, dest.Latitude, l);
                 float NewLongitude = Single.Lerp(origin.Longitude, dest.Longitude, k);
                 double degrees;
