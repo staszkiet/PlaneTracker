@@ -22,4 +22,9 @@ namespace ObjectOrientedDesign.Objects
     {
 
     }
+
+    public interface IReportable
+    {
+        public string? Accept(IMedia v);
+    }
 }

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ObjectOrientedDesign.Objects
 {
-    public class Airport : Entity
+    public class Airport : Entity, IReportable
     {
         public ulong ID { get; init; }
         public string Name { get; init; }
@@ -24,6 +25,11 @@ namespace ObjectOrientedDesign.Objects
             this.Latitude = Latitude;
             this.AMSL = AMSL;
             this.Country = Country;
+        }
+
+        public string Accept(IMedia visitor)
+        {
+            return visitor.PrintAirportInfo(this);
         }
     }
 }

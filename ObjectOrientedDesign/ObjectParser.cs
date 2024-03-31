@@ -23,7 +23,7 @@ namespace ObjectOrientedDesign
         List<Entity> Generate();
         List<Flight> GenerateFlights();
         List<Airport> GenerateAirports();
-
+        List<IReportable> GenerateReportables();
         string outpath
         {
             get;
@@ -72,6 +72,18 @@ namespace ObjectOrientedDesign
         public List<Airport> GenerateAirports()
         {
             List<Airport> l = new List<Airport>();
+            AirportGenerator f = new AirportGenerator();
+            foreach (string[] obj in strings["AI"])
+            {
+                Airport temp = f.Generate(obj);
+                l.Add(temp);
+            }
+            return l;
+        }
+
+        public List<IReportable> GenerateReportables()
+        {
+            List<IReportable> l = new List<IReportable>();
             AirportGenerator f = new AirportGenerator();
             foreach (string[] obj in strings["AI"])
             {
@@ -166,6 +178,20 @@ namespace ObjectOrientedDesign
         public List<Airport> GenerateAirports()
         {
             List<Airport> l = new List<Airport>();
+            TCPAirportGenerator f = new TCPAirportGenerator();
+            mut.WaitOne();
+            foreach (byte[] obj in bytes["NAI"])
+            {
+                Airport temp = f.Generate(obj[7..]);
+                l.Add(temp);
+            }
+            mut.ReleaseMutex();
+            return l;
+        }
+
+        public List<IReportable> GenerateReportables()
+        {
+            List<IReportable> l = new List<IReportable>();
             TCPAirportGenerator f = new TCPAirportGenerator();
             mut.WaitOne();
             foreach (byte[] obj in bytes["NAI"])

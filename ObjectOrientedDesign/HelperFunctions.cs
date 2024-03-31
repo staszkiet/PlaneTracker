@@ -17,6 +17,30 @@ namespace ObjectOrientedDesign
             Console.WriteLine("Podaj nazwę pliku do zapisu (w przypadku źródła TCP podaj cokolwiek)");
             outpath = Console.ReadLine();
         }
+
+        public static void Report(ObjectParser parser)
+        {
+            List<IReportable> r = parser.GenerateReportables();
+            List<IMedia> medias = new List<IMedia>();
+            medias.Add(new Television("Telewizja Abelowa"));
+            medias.Add(new Television("Kanał TV-sensor"));
+            medias.Add(new Radio("Radio Kwantyfikator"));
+            medias.Add(new Radio("Radio Shmem"));
+            medias.Add(new Newspaper("Gazeta Kategoryczna"));
+            medias.Add(new Newspaper("Dziennik Politechniczny"));
+            NewsGenerator ng = new NewsGenerator(medias, r);
+            foreach (string? msg in ng.GenerateNextNews())
+            {
+                if (msg != null)
+                {
+                    Console.WriteLine(msg);
+                }
+                else
+                {
+                    return;
+                }
+            }
+        }
         public static void SnapShot(ObjectParser parser)
         {
             string s = "";
@@ -30,6 +54,11 @@ namespace ObjectOrientedDesign
                     list = parser.Generate();
                     ISerializer jsons = new JSONSerializer();
                     jsons.SerializeToFile(parser.outpath, list);
+                }
+                else if (s == "report")
+                {
+                    Task task = new Task(() => Report(parser));
+                    task.Start();
                 }
             }
         }

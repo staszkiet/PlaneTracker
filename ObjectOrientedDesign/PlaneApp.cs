@@ -20,7 +20,7 @@ namespace ObjectOrientedDesign
         public PlaneApp()
         {
             HelperFunctions.ReadFTRPaths(out path, out outpath);
-            parser = new TCPtoObject(path);
+            parser = new FTRtoObject(path, outpath);
             flights = parser.GenerateFlights();
             airports = parser.GenerateAirports();
             parser.OnUpdate += UpdateHandler;
