@@ -81,15 +81,37 @@ namespace ObjectOrientedDesign
             return l;
         }
 
+        public List<CargoPlane> GenerateCargoPlanes()
+        {
+            List<CargoPlane> l = new List<CargoPlane>();
+            CargoPlaneGenerator f = new CargoPlaneGenerator();
+            foreach (string[] obj in strings["CP"])
+            {
+                CargoPlane temp = f.Generate(obj);
+                l.Add(temp);
+            }
+            return l;
+        }
+
+        public List<PassengerPlane> GeneratePassengerPlanes()
+        {
+            List<PassengerPlane> l = new List<PassengerPlane>();
+            PassengerPlaneGenerator f = new PassengerPlaneGenerator();
+            foreach (string[] obj in strings["PP"])
+            {
+                PassengerPlane temp = f.Generate(obj);
+                l.Add(temp);
+            }
+            return l;
+        }
+
         public List<IReportable> GenerateReportables()
         {
             List<IReportable> l = new List<IReportable>();
-            AirportGenerator f = new AirportGenerator();
-            foreach (string[] obj in strings["AI"])
-            {
-                Airport temp = f.Generate(obj);
-                l.Add(temp);
-            }
+            List<Airport> a = GenerateAirports();
+            l.AddRange(a);
+            l.AddRange(GenerateCargoPlanes());
+            l.AddRange(GeneratePassengerPlanes());
             return l;
         }
         public FTRtoObject(string path, string outpath)

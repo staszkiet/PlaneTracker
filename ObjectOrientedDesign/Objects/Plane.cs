@@ -23,7 +23,7 @@ namespace ObjectOrientedDesign.Objects
         public string? Model { get; init; }
     }
 
-    public class CargoPlane : Plane
+    public class CargoPlane : Plane, IReportable
     {
         public CargoPlane(ulong ID, string Serial, string Country, string Model, float MaxLoad) : base(ID, Serial, Country, Model)
         {
@@ -32,9 +32,14 @@ namespace ObjectOrientedDesign.Objects
 
         [JsonPropertyOrder(1)]
         public float MaxLoad { get; init; }
+
+        public string Accept(IMedia visitor)
+        {
+            return visitor.PrintCargoPlaneInfo(this);
+        }
     }
 
-    public class PassengerPlane : Plane
+    public class PassengerPlane : Plane, IReportable
     {
         [JsonPropertyOrder(1)]
         public ushort FirstClassSize { get; init; }
@@ -49,6 +54,11 @@ namespace ObjectOrientedDesign.Objects
             this.FirstClassSize = FirstClassSize;
             this.EconomyClassSize = EconomyClassSize;
             this.BusinessClassSize = BusinessClassSize;
+        }
+
+        public string Accept(IMedia visitor)
+        {
+            return visitor.PrintPassengerPlaneInfo(this);
         }
     }
 }
