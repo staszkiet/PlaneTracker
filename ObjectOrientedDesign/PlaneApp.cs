@@ -17,10 +17,11 @@ namespace ObjectOrientedDesign
         List<Airport> airports;
         string? path;
         string? outpath;
+        string? eventpath;
         public PlaneApp()
         {
-            HelperFunctions.ReadFTRPaths(out path, out outpath);
-            parser = new FTRtoObject(path, outpath);
+            HelperFunctions.ReadFTRPaths(out path, out outpath, out eventpath);
+            parser = new TCPtoObject(path, eventpath);
             flights = parser.GenerateFlights();
             airports = parser.GenerateAirports();
             parser.OnUpdate += UpdateHandler;
@@ -40,12 +41,16 @@ namespace ObjectOrientedDesign
             while (true)
             {
                 List<FlightGUI> list = new List<FlightGUI>();
-                foreach (Flight fl in flights)
+                flights = parser.GenerateFlights();
+                lock (parser.lists)
                 {
-                    Airport? origin = airports.Find(x => x.ID == fl.Origin);
-                    Airport? dest = airports.Find(x => x.ID == fl.Target);
-                    UpdateFunctions.Update(origin, dest, fl, ref list);
-                }
+                    foreach (Flight fl in flights)
+                    {
+                        Airport? origin = airports.Find(x => x.ID == fl.Origin);
+                        Airport? dest = airports.Find(x => x.ID == fl.Target);
+                        UpdateFunctions.Update(origin, dest, fl, ref list);
+                    }
+                }   
                 FlightsGUIData fgd = new FlightsGUIData();
                 fgd.UpdateFlights(list);
                 Runner.UpdateGUI(fgd);

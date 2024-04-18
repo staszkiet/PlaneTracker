@@ -17,7 +17,6 @@ namespace ObjectOrientedDesign.Objects
             Model = model;
         }
 
-        public ulong ID { get; init; }
         public string? Serial { get; init; }
         public string? Country { get; init; }
         public string? Model { get; init; }

@@ -7,17 +7,19 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
 using SkiaSharp;
+using System.Xml.Linq;
+using Avalonia;
 
 namespace ObjectOrientedDesign
 {
     public abstract class TCPGenerator
     {
-        public abstract Entity Generate(byte[] bytes);
+        public abstract void Generate(byte[] bytes, ref ListsDatabase lists);
     }
 
     public class TCPAirportGenerator() : TCPGenerator
     {
-        public override Airport Generate(byte[] bytes)
+        public override void Generate(byte[] bytes, ref ListsDatabase l)
         {
             int lastp = 0;
             ulong ID = BitConverter.ToUInt64(bytes[0..8]);
@@ -34,13 +36,19 @@ namespace ObjectOrientedDesign
             float AMSL = BitConverter.ToSingle(bytes[lastp..(lastp + 4)]);
             lastp = lastp + 4;
             string country = System.Text.Encoding.ASCII.GetString(bytes[lastp..(lastp + 3)]);
-            return new Airport(ID, name, code, longitude, latitude, AMSL, country);
+            Airport a = new Airport(ID, name, code, longitude, latitude, AMSL, country);
+            lock (l)
+            {
+                l.airports.Add(a);
+                l.entities.Add(a);
+            }
+        
 
         }
     }
     public class TCPCrewGenerator : TCPGenerator
     {
-        public override Crew Generate(byte[] bytes)
+        public override void Generate(byte[] bytes, ref ListsDatabase l)
         {
             ulong ID = BitConverter.ToUInt64(bytes[0..8]);
             ushort namelength = BitConverter.ToUInt16(bytes[8..10]);
@@ -58,26 +66,37 @@ namespace ObjectOrientedDesign
             ushort Practice = BitConverter.ToUInt16(bytes[lastp..(lastp + 2)]);
             lastp = lastp + 2;
             string Role = System.Text.Encoding.ASCII.GetString(bytes[lastp..(lastp + 1)]); //duh
-            return new Crew(ID, name, Age, Phone, Email, Practice, Role);
+            Crew c = new Crew(ID, name, Age, Phone, Email, Practice, Role);
+            lock (l)
+            {
+                l.crews.Add(c);
+                l.entities.Add(c);
+            }
+        
         }
     }
     public class TCPCargoGenerator : TCPGenerator
     {
-        public override Cargo Generate(byte[] bytes)
+        public override void Generate(byte[] bytes, ref ListsDatabase l)
         {
             ulong ID = BitConverter.ToUInt64(bytes[0..8]);
             float weight = BitConverter.ToSingle(bytes[8..12]);
             string code = System.Text.Encoding.ASCII.GetString(bytes[12..18]);
             ushort description_length = BitConverter.ToUInt16(bytes[18..20]);
             string desc = System.Text.Encoding.ASCII.GetString(bytes[20..(20 + description_length)]);
-            return new Cargo(ID, weight, code, desc);
+            Cargo c = new Cargo(ID, weight, code, desc);
+            lock (l)
+            {
+                l.cargos.Add(c);
+                l.entities.Add(c);
+            }
         }
 
     }
 
     public class TCPPassengerGenerator : TCPGenerator
     {
-        public override Passenger Generate(byte[] bytes)
+        public override void Generate(byte[] bytes, ref ListsDatabase l)
         {
             ulong ID = BitConverter.ToUInt64(bytes[0..8]);
             ushort namelength = BitConverter.ToUInt16(bytes[8..10]);
@@ -95,14 +114,19 @@ namespace ObjectOrientedDesign
             string Class = System.Text.Encoding.ASCII.GetString(bytes[lastp..(lastp + 1)]); //duh
             lastp++;
             ulong Miles = BitConverter.ToUInt64(bytes[lastp..(lastp + 8)]);
-            return new Passenger(ID, name, Age, Phone, Email, Class, Miles);
+            Passenger p = new Passenger(ID, name, Age, Phone, Email, Class, Miles);
+            lock (l)
+            {
+                l.passengers.Add(p);
+                l.entities.Add(p);
+            }
         }
 
     }
 
     public class TCPCargoPlaneGenerator : TCPGenerator
     {
-        public override CargoPlane Generate(byte[] bytes)
+        public override void Generate(byte[] bytes, ref ListsDatabase l)
         {
             ulong ID = BitConverter.ToUInt64(bytes[0..8]);
             string serial = System.Text.Encoding.ASCII.GetString(bytes[8..18]);
@@ -112,13 +136,18 @@ namespace ObjectOrientedDesign
             string model = System.Text.Encoding.ASCII.GetString(bytes[23..(23 + model_length)]);
             int lastp = model_length + 23;
             float max_load = BitConverter.ToSingle(bytes[lastp..(lastp + 4)]);
-            return new CargoPlane(ID, serial, country, model, max_load);
+            CargoPlane cp = new CargoPlane(ID, serial, country, model, max_load);
+            lock (l)
+            {
+                l.cargoPlanes.Add(cp);
+                l.entities.Add(cp);
+            }
         }
 
     }
     public class TCPPassengerPlaneGenerator : TCPGenerator
     {
-        public override PassengerPlane Generate(byte[] bytes)
+        public override void Generate(byte[] bytes, ref ListsDatabase l)
         {
             ulong ID = BitConverter.ToUInt64(bytes[0..8]);
             string serial = System.Text.Encoding.ASCII.GetString(bytes[8..18]);
@@ -132,14 +161,19 @@ namespace ObjectOrientedDesign
             ushort businessclass = BitConverter.ToUInt16(bytes[lastp..(lastp + 2)]);
             lastp = lastp + 2;
             ushort economyclass = BitConverter.ToUInt16(bytes[lastp..(lastp + 2)]);
-            return new PassengerPlane(ID, serial, country, model, firstclass, businessclass, economyclass);
+            PassengerPlane pp = new PassengerPlane(ID, serial, country, model, firstclass, businessclass, economyclass);
+            lock (l)
+            {
+                l.passengerPlanes.Add(pp);
+                l.entities.Add(pp);
+            }
         }
 
     }
 
     public class TCPFlightGenerator : TCPGenerator
     {
-        public override Flight Generate(byte[] bytes)
+        public override void Generate(byte[] bytes, ref ListsDatabase l)
         {
             ulong ID = BitConverter.ToUInt64(bytes[0..8]);
             ulong Origin = BitConverter.ToUInt64(bytes[8..16]);
@@ -164,8 +198,12 @@ namespace ObjectOrientedDesign
                 passenger[i] = BitConverter.ToUInt64(bytes[lastp..(lastp + 8)]);
                 lastp += 8;
             }
-            
-            return new Flight(ID, Origin, Target, to, la, int.MaxValue, int.MaxValue, null, PlaneID, crew, passenger);
+           lock (l)
+            {
+                Flight f = new Flight(ID, Origin, Target, to, la, int.MaxValue, int.MaxValue, null, PlaneID, crew, passenger);
+                l.flights.Add(f);
+                l.entities.Add(f);
+            }
         }
 
 

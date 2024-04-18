@@ -15,11 +15,11 @@ namespace ObjectOrientedDesign
 {
     public abstract class Generator
     {
-        public abstract Entity Generate(string[] s);
+        public abstract void Generate(string[] s, ref ListsDatabase l);
     }
     public class CrewGenerator : Generator
     {
-        public override Crew Generate(string[] s)
+        public override void Generate(string[] s, ref ListsDatabase l)
         {
             ulong ID = ulong.Parse(s[1]);
             string Name = s[2];
@@ -28,14 +28,16 @@ namespace ObjectOrientedDesign
             string Email = s[5];
             ushort Practice = ushort.Parse(s[6]);
             string Role = s[7];
-            return new Crew(ID, Name, Age, Phone, Email, Practice, Role);
+            Crew c = new Crew(ID, Name, Age, Phone, Email, Practice, Role);
+            l.crews.Add(c);
+            l.entities.Add(c);
         }
 
     }
 
     public class PassengerGenerator : Generator
     {
-        public override Passenger Generate(string[] s)
+        public override void Generate(string[] s, ref ListsDatabase l)
         {
             ulong ID = ulong.Parse(s[1]);
             string Name = s[2];
@@ -44,38 +46,44 @@ namespace ObjectOrientedDesign
             string Email = s[5];
             string Class = s[6];
             ulong Miles = ulong.Parse(s[7]);
-            return new Passenger(ID, Name, Age, Phone, Email, Class, Miles);
+            Passenger p = new Passenger(ID, Name, Age, Phone, Email, Class, Miles);
+            l.passengers.Add(p);
+            l.entities.Add(p);
         }
 
     }
 
     public class CargoGenerator : Generator
     {
-        public override Cargo Generate(string[] s)
+        public override void Generate(string[] s, ref ListsDatabase l)
         {
             ulong ID = ulong.Parse(s[1]);
             float Weight = float.Parse(s[2], CultureInfo.InvariantCulture);
             string Code = s[3];
             string Description = s[4];
-            return new Cargo(ID, Weight, Code, Description);
+            Cargo c = new Cargo(ID, Weight, Code, Description);
+            l.cargos.Add(c);
+            l.entities.Add(c);
         }
     }
 
     public class CargoPlaneGenerator : Generator
     {
-        public override CargoPlane Generate(string[] s)
+        public override void Generate(string[] s, ref ListsDatabase l)
         {
             ulong ID = uint.Parse(s[1]);
             string Serial = s[2];
             string Country = s[3];
             string Model = s[4];
             float MaxLoad = float.Parse(s[5], CultureInfo.InvariantCulture);
-            return new CargoPlane(ID, Serial, Country, Model, MaxLoad);
+            CargoPlane cp = new CargoPlane(ID, Serial, Country, Model, MaxLoad);
+            l.cargoPlanes.Add(cp);
+            l.entities.Add(cp);
         }
     }
     public class PassengerPlaneGenerator : Generator
     {
-        public override PassengerPlane Generate(string[] s)
+        public override void Generate(string[] s, ref ListsDatabase l)
         {
             ulong ID = uint.Parse(s[1]);
             string Serial = s[2];
@@ -84,14 +92,16 @@ namespace ObjectOrientedDesign
             ushort FirstClassSize = ushort.Parse(s[5]);
             ushort BusinessClassSize = ushort.Parse(s[6]);
             ushort EconomyClassSize = ushort.Parse(s[7]);
-            return new PassengerPlane(ID, Serial, Country, Model, FirstClassSize, BusinessClassSize, EconomyClassSize);
+            PassengerPlane pp = new PassengerPlane(ID, Serial, Country, Model, FirstClassSize, BusinessClassSize, EconomyClassSize);
+            l.passengerPlanes.Add(pp);
+            l.entities.Add(pp);
 
         }
     }
 
     public class AirportGenerator : Generator
     {
-        public override Airport Generate(string[] s)
+        public override void Generate(string[] s, ref ListsDatabase l)
         {
             ulong ID = ulong.Parse(s[1]);
             string Name = s[2];
@@ -100,13 +110,15 @@ namespace ObjectOrientedDesign
             float Latitude = float.Parse(s[5], CultureInfo.InvariantCulture);
             float AMSL = float.Parse(s[6], CultureInfo.InvariantCulture);
             string Country = s[7];
-            return new Airport(ID, Name, Code, Longitude, Latitude, AMSL, Country);
+            Airport a = new Airport(ID, Name, Code, Longitude, Latitude, AMSL, Country);
+            l.airports.Add(a);
+            l.entities.Add(a);
         }
     }
 
     public class FlightGenerator : Generator
     {
-        public override Flight Generate(string[] s)
+        public override void Generate(string[] s, ref ListsDatabase l)
         {
             ulong ID = ulong.Parse(s[1]);
             ulong Origin = ulong.Parse(s[2]);
@@ -134,8 +146,9 @@ namespace ObjectOrientedDesign
             {
                 Load[i] = ulong.Parse(LoadTab[i]);
             }
-
-            return new Flight(ID, Origin, Target, TakeoffTime, LandingTime, Longitude, Latitude, AMSL, PlaneID, Load, Crew);
+            Flight f = new Flight(ID, Origin, Target, TakeoffTime, LandingTime, Longitude, Latitude, AMSL, PlaneID, Load, Crew);
+            l.flights.Add(f);
+            l.entities.Add(f);
         }
     }
 }

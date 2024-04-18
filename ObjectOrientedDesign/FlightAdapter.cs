@@ -20,8 +20,6 @@ namespace ObjectOrientedDesign
             this.ID = fl.ID;
             this.WorldPosition = new WorldPosition(lattitude, longitude);
             this.MapCoordRotation = degree;
-            f.Latitude = lattitude;
-            f.Longitude = longitude;
         }
 
     }

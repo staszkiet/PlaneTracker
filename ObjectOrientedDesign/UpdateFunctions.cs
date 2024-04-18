@@ -18,33 +18,38 @@ namespace ObjectOrientedDesign
             DateTime landing = DateTime.Parse(fl.LandingTime);
             long takeoffticks = takeoff.Ticks;
             long landingticks = landing.Ticks;
-            if (takeoffticks > landingticks)
-            {
-                landing = landing.AddDays(1);
-                landingticks = landing.Ticks;
-            }
+            float NewLatitude;
+            float NewLongitude;
             if (takeoffticks < nowticks && landingticks > nowticks)
             {
-                float l = (float)(nowticks - takeoffticks) / (landingticks - takeoffticks);
-                float k = (float)(nowticks - takeoffticks) / (landingticks - takeoffticks);
-                float NewLatitude = Single.Lerp(origin.Latitude, dest.Latitude, l);
-                float NewLongitude = Single.Lerp(origin.Longitude, dest.Longitude, k);
-                double degrees;
                 if (fl.Latitude == int.MaxValue)
-                { 
-                    degrees = Math.Atan2(dest.Longitude - origin.Longitude, dest.Latitude - origin.Latitude);
+                {
+                    float l = (float)(nowticks - takeoffticks) / (landingticks - takeoffticks);
+                    float k = (float)(nowticks - takeoffticks) / (landingticks - takeoffticks);
+                    NewLatitude = Single.Lerp(origin.Latitude, dest.Latitude, l);
+                    NewLongitude = Single.Lerp(origin.Longitude, dest.Longitude, k);
                 }
                 else
                 {
-                    var pos1 = SphericalMercator.FromLonLat(fl.Longitude, fl.Latitude);
-                    var pos2 = SphericalMercator.FromLonLat(NewLongitude, NewLatitude);
-                    fl.Latitude = NewLatitude;
-                    fl.Longitude = NewLongitude;
-                    degrees = Math.Atan2(pos2.x - pos1.x, pos2.y - pos1.y);
+                    float latdiff = dest.Latitude - fl.Latitude;
+                    float londiff = dest.Longitude - fl.Longitude;
+                    TimeSpan timediff = landing - DateTime.Now;
+                    float secs = (float)timediff.TotalSeconds;
+                    float latspeed = latdiff / secs;
+                    float lonspeed = londiff / secs;
+                    NewLatitude = fl.Latitude + latspeed;
+                    NewLongitude = fl.Longitude + lonspeed;
                 }
-                
+                double degrees;
+                var pos1 = SphericalMercator.FromLonLat(fl.Longitude, fl.Latitude);
+                var pos2 = SphericalMercator.FromLonLat(NewLongitude, NewLatitude);
+                fl.Latitude = NewLatitude;
+                fl.Longitude = NewLongitude;
+                degrees = Math.Atan2(pos2.x - pos1.x, pos2.y - pos1.y);
                 list.Add(new FlightAdapter(fl, NewLatitude, NewLongitude, degrees));
             }
+            
+          
         }
     }
 }

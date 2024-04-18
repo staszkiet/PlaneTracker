@@ -20,7 +20,7 @@ namespace ObjectOrientedDesign.Objects
     [JsonDerivedType(typeof(Cargo), "CA")]
     public abstract class Entity
     {
-
+        public ulong ID;
     }
 
     public interface IReportable

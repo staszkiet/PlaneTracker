@@ -8,7 +8,6 @@ namespace ObjectOrientedDesign.Objects
 {
     public class Cargo : Entity
     {
-        public ulong ID { get; init; }
         public float Weight { get; init; }
         public string Code { get; init; }
         public string Description { get; init; }

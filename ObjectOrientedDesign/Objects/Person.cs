@@ -9,11 +9,10 @@ namespace ObjectOrientedDesign.Objects
 {
     public abstract class Person : Entity
     {
-        public ulong ID { get; init; }
         public string Name { get; init; }
         public ulong Age { get; init; }
-        public string Phone { get; init; }
-        public string Email { get; init; }
+        public string Phone { get; set; }
+        public string Email { get; set; }
 
         protected Person(ulong iD, string name, ulong age, string phone, string email)
         {

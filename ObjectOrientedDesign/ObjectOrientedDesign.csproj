@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <Reference Include="NetworkSourceSimulator">
-      <HintPath>..\..\..\..\Downloads\Includes\NetworkSourceSimulator.dll</HintPath>
+      <HintPath>..\..\..\..\Downloads\IncludesUpdated\NetworkSourceSimulator.dll</HintPath>
     </Reference>
   </ItemGroup>
 

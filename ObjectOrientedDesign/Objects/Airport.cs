@@ -9,12 +9,11 @@ namespace ObjectOrientedDesign.Objects
 {
     public class Airport : Entity, IReportable
     {
-        public ulong ID { get; init; }
         public string Name { get; init; }
         public string Code { get; init; }
-        public float Longitude { get; init; }
-        public float Latitude { get; init; }
-        public float AMSL { get; init; }
+        public float Longitude { get; set; }
+        public float Latitude { get; set; }
+        public float AMSL { get; set; }
         public string Country { get; init; }
         public Airport(ulong ID, string Name, string Code, float Longitude, float Latitude, float AMSL, string Country)
         {

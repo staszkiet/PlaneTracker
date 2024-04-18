@@ -18,13 +18,15 @@ using System.Reflection.Metadata;
 namespace ObjectOrientedDesign
 {
     public delegate void UpdateDel();
-    public interface ObjectParser
+    public abstract class ObjectParser
     {
-        List<Entity> Generate();
-        List<Flight> GenerateFlights();
-        List<Airport> GenerateAirports();
-        List<IReportable> GenerateReportables();
-        string outpath
+        public abstract List<Entity> Generate();
+        public abstract List<Flight> GenerateFlights();
+        public abstract List<Airport> GenerateAirports();
+        public abstract List<IReportable> GenerateReportables();
+
+        public ListsDatabase lists;
+        public string outpath
         {
             get;
         }
@@ -35,7 +37,6 @@ namespace ObjectOrientedDesign
     public class FTRtoObject : ObjectParser
     {
         Dictionary<string, Generator> generators = new Dictionary<string, Generator>();
-        public Dictionary<string, List<string[]>> strings;
         string path;
         public string outpath
         {
@@ -44,68 +45,31 @@ namespace ObjectOrientedDesign
         }
 
         public event UpdateDel? OnUpdate;
-        public List<Entity> Generate()
+        public override List<Entity> Generate()
         {
-            List<Entity> l = new List<Entity>();
-            foreach (string p in strings.Keys)
-            {
-                foreach (string[] obj in strings[p])
-                {
-                    Entity e = generators[p].Generate(obj);
-                    l.Add(e);
-                }
-            }
-            return l;
+            return lists.entities;
         }
 
-        public List<Flight> GenerateFlights()
+        public override List<Flight> GenerateFlights()
         {
-            List<Flight> l = new List<Flight>();
-            FlightGenerator f = new FlightGenerator();
-            foreach (string[] obj in strings["FL"])
-            {
-                Flight temp = f.Generate(obj);
-                l.Add(temp);
-            }
-            return l;
+            return lists.flights;
         }
-        public List<Airport> GenerateAirports()
+        public override List<Airport> GenerateAirports()
         {
-            List<Airport> l = new List<Airport>();
-            AirportGenerator f = new AirportGenerator();
-            foreach (string[] obj in strings["AI"])
-            {
-                Airport temp = f.Generate(obj);
-                l.Add(temp);
-            }
-            return l;
+            return lists.airports;
         }
 
         public List<CargoPlane> GenerateCargoPlanes()
         {
-            List<CargoPlane> l = new List<CargoPlane>();
-            CargoPlaneGenerator f = new CargoPlaneGenerator();
-            foreach (string[] obj in strings["CP"])
-            {
-                CargoPlane temp = f.Generate(obj);
-                l.Add(temp);
-            }
-            return l;
+            return lists.cargoPlanes;
         }
 
         public List<PassengerPlane> GeneratePassengerPlanes()
         {
-            List<PassengerPlane> l = new List<PassengerPlane>();
-            PassengerPlaneGenerator f = new PassengerPlaneGenerator();
-            foreach (string[] obj in strings["PP"])
-            {
-                PassengerPlane temp = f.Generate(obj);
-                l.Add(temp);
-            }
-            return l;
+            return lists.passengerPlanes;
         }
 
-        public List<IReportable> GenerateReportables()
+        public override List<IReportable> GenerateReportables()
         {
             List<IReportable> l = new List<IReportable>();
             List<Airport> a = GenerateAirports();
@@ -116,6 +80,7 @@ namespace ObjectOrientedDesign
         }
         public FTRtoObject(string path, string outpath)
         {
+            lists = new ListsDatabase();
             this.path = path;
             this.outpath = outpath;
             generators = new Dictionary<string, Generator>();
@@ -126,20 +91,12 @@ namespace ObjectOrientedDesign
             generators.Add("PP", new PassengerPlaneGenerator());
             generators.Add("AI", new AirportGenerator());
             generators.Add("FL", new FlightGenerator());
-            strings = new Dictionary<string, List<string[]>>();
-            strings.Add("C", new List<string[]>());
-            strings.Add("P", new List<string[]>());
-            strings.Add("CA", new List<string[]>());
-            strings.Add("CP", new List<string[]>());
-            strings.Add("PP", new List<string[]>());
-            strings.Add("AI", new List<string[]>());
-            strings.Add("FL", new List<string[]>());
             StreamReader sr = new StreamReader(path);
             string? s = sr.ReadLine();
             while (s != null)
             {
                 string[] tab = s.Split(",");
-                strings[tab[0]].Add(tab);
+                generators[tab[0]].Generate(tab, ref lists);
                 s = sr.ReadLine();
             }
             sr.Close();
@@ -152,8 +109,6 @@ namespace ObjectOrientedDesign
     {
         Dictionary<string, TCPGenerator> generators;
         public NetworkSourceSimulator.NetworkSourceSimulator nss;
-        public Dictionary<string, List<byte[]>> bytes;
-        private static Mutex mut = new Mutex();
         public event UpdateDel? OnUpdate;
         public string outpath
         {
@@ -164,68 +119,52 @@ namespace ObjectOrientedDesign
         }
 
 
-        public List<Entity> Generate() // z tablicy bajtów robimy listę (serializacja w mainie)
+        public override List<Entity> Generate() // z tablicy bajtów robimy listę (serializacja w mainie)
         { 
-            string? ret;
-            List<Entity> l = new List<Entity>();
-            mut.WaitOne();
-            foreach (string p in bytes.Keys)
-            {
-                foreach (byte[] obj in bytes[p])
-                {
-                    ret = System.Text.Encoding.ASCII.GetString(obj[0..3]);
-                    Entity temp = generators[ret].Generate(obj[7..]);
-                    l.Add(temp);
-                }
-            }
-            mut.ReleaseMutex();
-            return l;
+            return lists.entities;
         }
 
         
-        public List<Flight> GenerateFlights()
+        public override List<Flight> GenerateFlights()
         {
             List<Flight> l = new List<Flight>();
-            TCPFlightGenerator f = new TCPFlightGenerator();
-            mut.WaitOne();
-            foreach (byte[] obj in bytes["NFL"])
-            {
-                Flight temp = f.Generate(obj[7..]);
-                l.Add(temp);
-            }
-            mut.ReleaseMutex();
+            l = lists.flights;
             return l;
         }
 
-        public List<Airport> GenerateAirports()
+        public override List<Airport> GenerateAirports()
         {
             List<Airport> l = new List<Airport>();
-            TCPAirportGenerator f = new TCPAirportGenerator();
-            mut.WaitOne();
-            foreach (byte[] obj in bytes["NAI"])
-            {
-                Airport temp = f.Generate(obj[7..]);
-                l.Add(temp);
-            }
-            mut.ReleaseMutex();
+            l = lists.airports;
             return l;
         }
 
-        public List<IReportable> GenerateReportables()
+        public List<CargoPlane> GenerateCargoPlanes()
+        {
+            List<CargoPlane> l = new List<CargoPlane>();
+            l = lists.cargoPlanes;
+            return l;
+        }
+
+        public List<PassengerPlane> GeneratePassengerPlanes()
+        {
+            List<PassengerPlane> l = new List<PassengerPlane>();
+            l = lists.passengerPlanes;
+            return l;
+        }
+        public override List<IReportable> GenerateReportables()
         {
             List<IReportable> l = new List<IReportable>();
             TCPAirportGenerator f = new TCPAirportGenerator();
-            mut.WaitOne();
-            foreach (byte[] obj in bytes["NAI"])
-            {
-                Airport temp = f.Generate(obj[7..]);
-                l.Add(temp);
-            }
-            mut.ReleaseMutex();
+            List<Airport> a = GenerateAirports();
+            l.AddRange(a);
+            l.AddRange(GenerateCargoPlanes());
+            l.AddRange(GeneratePassengerPlanes());
             return l;
         }
-        public TCPtoObject(string path)
+        public TCPtoObject(string path, string eventpath)
         {
+            lists = new ListsDatabase();
             generators = new Dictionary<string, TCPGenerator>();
             generators.Add("NCR", new TCPCrewGenerator());
             generators.Add("NPA", new TCPPassengerGenerator());
@@ -234,28 +173,80 @@ namespace ObjectOrientedDesign
             generators.Add("NPP", new TCPPassengerPlaneGenerator());
             generators.Add("NAI", new TCPAirportGenerator());
             generators.Add("NFL", new TCPFlightGenerator());
-            bytes = new Dictionary<string, List<byte[]>>();
-            bytes.Add("NCR", new List<byte[]>());
-            bytes.Add("NPA", new List<byte[]>());
-            bytes.Add("NCA", new List<byte[]>());               
-            bytes.Add("NCP", new List<byte[]>());
-            bytes.Add("NPP", new List<byte[]>());
-            bytes.Add("NAI", new List<byte[]>());
-            bytes.Add("NFL", new List<byte[]>());
             nss = new NetworkSourceSimulator.NetworkSourceSimulator(path, 0, 10);
             nss.OnNewDataReady += reader;
-            Task task = new Task(() => { nss.Run(); });
-            task.Start();
+            TaskStarter(eventpath);
+        }
+
+        public async Task TaskStarter(string eventpath)
+        {
+            await Task.Run(() => { nss.Run(); });
+            nss = new NetworkSourceSimulator.NetworkSourceSimulator(eventpath, 0, 10);
+            nss.OnIDUpdate += UpdateID;
+            nss.OnPositionUpdate += UpdatePosition;
+            nss.OnContactInfoUpdate += UpdateContactInfo;
+            await Task.Run(() => { nss.Run(); });
         }
         public void reader(object sender, NewDataReadyArgs ndra)
         {
             int ind = ndra.MessageIndex;
             Message m = nss.GetMessageAt(ind);
             string ret = System.Text.Encoding.ASCII.GetString(m.MessageBytes[0..3]);
-            mut.WaitOne();
-            this.bytes[ret].Add(m.MessageBytes);
-            mut.ReleaseMutex();
+            generators[ret].Generate(m.MessageBytes[7..], ref lists);
             this.OnUpdate?.Invoke();
+        }
+
+        public void UpdateID(object sender, IDUpdateArgs e)
+        {
+            lock (lists)
+            {
+                List<Entity> entities = this.Generate();
+                Entity? found = entities.Find((x) => x.ID == e.ObjectID);
+                if(found != null)
+                {
+                    found.ID = e.NewObjectID;
+                }
+            }
+        }
+        public void UpdatePosition(object sender, PositionUpdateArgs e)
+        {
+            lock (lists)
+            {
+                List<Flight> flights = lists.flights;
+                Flight? found = flights.Find((x) => x.ID == e.ObjectID);
+                if (found != null)
+                {
+                    found.AMSL = e.AMSL;
+                    found.Latitude = e.Latitude;
+                    found.Longitude = e.Longitude;
+                    return;
+                }
+                List<Airport> airports = lists.airports;
+                Airport? foundairport = airports.Find((x) => x.ID == e.ObjectID);
+                if (foundairport != null)
+                {
+                    foundairport.AMSL = e.AMSL;
+                    foundairport.Latitude = e.Latitude;
+                    foundairport.Longitude = e.Longitude;
+                    return;
+                }
+            }
+        }
+
+        public void UpdateContactInfo(object sender, ContactInfoUpdateArgs e)
+        {
+            lock (lists)
+            {
+                List<Person> people = new List<Person>();
+                people.AddRange(lists.passengers);
+                people.AddRange(lists.crews);
+                Person? p = people.Find((x) => x.ID == e.ObjectID);
+                if (p != null)
+                {
+                    p.Email = e.EmailAddress;
+                    p.Phone = e.PhoneNumber;
+                }
+            }
         }
     }
 }
