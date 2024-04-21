@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DynamicData;
+using NetworkSourceSimulator;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,6 +20,18 @@ namespace ObjectOrientedDesign.Objects
             Weight = weight;
             Code = code;
             Description = description;
+        }
+
+        public override void ChangeID(IDUpdateArgs e, ListsDatabase l)
+        {
+            List<Flight> fl = l.flights;
+            List<Flight> affectedfl = new List<Flight>();
+            affectedfl = fl.FindAll((x) => (x.Load.Contains(e.ObjectID)));
+            foreach (Flight f in affectedfl)
+            {
+                f.Load.Replace(e.ObjectID, e.NewObjectID);
+            }
+            this.ID = e.NewObjectID;
         }
     }
 }

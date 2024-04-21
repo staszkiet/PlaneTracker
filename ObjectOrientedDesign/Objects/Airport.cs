@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NetworkSourceSimulator;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -29,6 +30,24 @@ namespace ObjectOrientedDesign.Objects
         public string Accept(IMedia visitor)
         {
             return visitor.PrintAirportInfo(this);
+        }
+
+        public override void ChangeID(IDUpdateArgs e, ListsDatabase l)
+        {
+            List<Flight> fl = l.flights;
+            List<Flight> affectedfl = new List<Flight>();
+            affectedfl = fl.FindAll((x) => (x.Target == e.ObjectID));
+            foreach(Flight f in affectedfl)
+            {
+                f.Target = e.NewObjectID;
+            }
+            affectedfl = new List<Flight>();
+            affectedfl = fl.FindAll((x) => (x.Origin == e.ObjectID));
+            foreach (Flight f in affectedfl)
+            {
+                f.Origin = e.NewObjectID;
+            }
+            this.ID = e.NewObjectID;
         }
     }
 }

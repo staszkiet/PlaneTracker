@@ -24,21 +24,21 @@ namespace ObjectOrientedDesign
         public abstract List<Flight> GenerateFlights();
         public abstract List<Airport> GenerateAirports();
         public abstract List<IReportable> GenerateReportables();
-
-        public ListsDatabase lists;
-        public string outpath
+        public abstract string outpath
         {
-            get;
+            get; init;
         }
 
         public event UpdateDel? OnUpdate;
+
+        public ListsDatabase lists;
     }
 
     public class FTRtoObject : ObjectParser
     {
         Dictionary<string, Generator> generators = new Dictionary<string, Generator>();
         string path;
-        public string outpath
+        public override string outpath
         {
             get;
             init;
@@ -110,11 +110,16 @@ namespace ObjectOrientedDesign
         Dictionary<string, TCPGenerator> generators;
         public NetworkSourceSimulator.NetworkSourceSimulator nss;
         public event UpdateDel? OnUpdate;
-        public string outpath
+        public string logpath;
+        public override string outpath
         {
             get
             {
                 return $"snapshot_{DateTime.Now.Hour}_{DateTime.Now.Minute}_{DateTime.Now.Second}.json";
+            }
+            init
+            {
+
             }
         }
 
@@ -164,6 +169,11 @@ namespace ObjectOrientedDesign
         }
         public TCPtoObject(string path, string eventpath)
         {
+            logpath = $"logs_{DateTime.Now.Day}_{DateTime.Now.Month}_{DateTime.Now.Year}.txt";
+            StreamWriter logWriter = new StreamWriter(logpath, append: true);
+            string s = $"App opened at {DateTime.Now.ToString("HH:mm:ss")}";
+            logWriter.WriteLine(s);
+            logWriter.Close();
             lists = new ListsDatabase();
             generators = new Dictionary<string, TCPGenerator>();
             generators.Add("NCR", new TCPCrewGenerator());
@@ -202,10 +212,17 @@ namespace ObjectOrientedDesign
             {
                 List<Entity> entities = this.Generate();
                 Entity? found = entities.Find((x) => x.ID == e.ObjectID);
-                if(found != null)
+                StreamWriter logWriter = new StreamWriter(logpath, append: true);
+                if (found != null)
                 {
-                    found.ID = e.NewObjectID;
+                    found.ChangeID(e, lists);
+                    logWriter.WriteLine($"Object old ID:{e.ObjectID} changed to {e.NewObjectID}");
                 }
+                else
+                {
+                    logWriter.WriteLine($"Object with ID:{e.ObjectID} not found");
+                }
+                logWriter.Close();
             }
         }
         public void UpdatePosition(object sender, PositionUpdateArgs e)
@@ -214,11 +231,14 @@ namespace ObjectOrientedDesign
             {
                 List<Flight> flights = lists.flights;
                 Flight? found = flights.Find((x) => x.ID == e.ObjectID);
+                StreamWriter logWriter = new StreamWriter(logpath, append: true);
                 if (found != null)
                 {
                     found.AMSL = e.AMSL;
                     found.Latitude = e.Latitude;
                     found.Longitude = e.Longitude;
+                    logWriter.WriteLine($"Object with ID:{e.ObjectID} changed Lat:{e.Latitude}, Lon:{e.Longitude}, AMSL:{e.AMSL}");
+                    logWriter.Close();
                     return;
                 }
                 List<Airport> airports = lists.airports;
@@ -228,13 +248,18 @@ namespace ObjectOrientedDesign
                     foundairport.AMSL = e.AMSL;
                     foundairport.Latitude = e.Latitude;
                     foundairport.Longitude = e.Longitude;
+                    logWriter.WriteLine($"Object with ID:{e.ObjectID} changed Lat:{e.Latitude}, Lon:{e.Longitude}, AMSL:{e.AMSL}");
+                    logWriter.Close();
                     return;
                 }
+                logWriter.WriteLine($"Object with ID {e.ObjectID} doeasn't exist or doesn't have position/AMSL");
+                logWriter.Close();
             }
         }
 
         public void UpdateContactInfo(object sender, ContactInfoUpdateArgs e)
         {
+            StreamWriter logWriter = new StreamWriter(logpath, append: true);
             lock (lists)
             {
                 List<Person> people = new List<Person>();
@@ -245,7 +270,13 @@ namespace ObjectOrientedDesign
                 {
                     p.Email = e.EmailAddress;
                     p.Phone = e.PhoneNumber;
+                    logWriter.WriteLine($"Object with ID {e.ObjectID}: Email changed to {e.EmailAddress}, Phone changed to {e.PhoneNumber}");
                 }
+                else
+                {
+                    logWriter.WriteLine($"Object with ID {e.ObjectID} doeasn't exist or doesn't have email/phone");
+                }
+                logWriter.Close();
             }
         }
     }

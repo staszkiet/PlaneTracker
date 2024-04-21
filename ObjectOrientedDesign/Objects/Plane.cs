@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NetworkSourceSimulator;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,17 @@ namespace ObjectOrientedDesign.Objects
             Model = model;
         }
 
+        public override void ChangeID(IDUpdateArgs e, ListsDatabase l)
+        {
+            List<Flight> fl = l.flights;
+            List<Flight> affectedfl = new List<Flight>();
+            affectedfl = fl.FindAll((x) => (x.PlaneID == e.ObjectID));
+            foreach (Flight f in affectedfl)
+            {
+                f.PlaneID = e.NewObjectID;
+            }
+            this.ID = e.NewObjectID;
+        }
         public string? Serial { get; init; }
         public string? Country { get; init; }
         public string? Model { get; init; }

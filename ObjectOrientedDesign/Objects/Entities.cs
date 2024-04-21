@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NetworkSourceSimulator;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
 using System.Linq;
@@ -21,6 +22,10 @@ namespace ObjectOrientedDesign.Objects
     public abstract class Entity
     {
         public ulong ID;
+        public virtual void ChangeID(IDUpdateArgs e, ListsDatabase l)
+        {
+            this.ID = e.NewObjectID;
+        }
     }
 
     public interface IReportable
