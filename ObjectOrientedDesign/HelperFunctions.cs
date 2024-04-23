@@ -47,6 +47,18 @@ namespace ObjectOrientedDesign
             }
           
         }
+
+        public static bool IsOnMap(Flight fl)
+        {
+            long nowticks = DateTime.Now.Ticks;
+            DateTime takeoff = DateTime.Parse(fl.TakeoffTime);
+            DateTime landing = DateTime.Parse(fl.LandingTime);
+            if (takeoff.Ticks < nowticks && landing.Ticks > nowticks)
+            {
+                return true;
+            }
+            return false;
+        }
         public static void SnapShot(ObjectParser parser)
         {
             string s = "";

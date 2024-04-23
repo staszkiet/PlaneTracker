@@ -80,7 +80,7 @@ namespace ObjectOrientedDesign
         }
         public FTRtoObject(string path, string outpath)
         {
-            lists = new ListsDatabase();
+            lists = ListsDatabase.GetInstance();
             this.path = path;
             this.outpath = outpath;
             generators = new Dictionary<string, Generator>();
@@ -169,12 +169,8 @@ namespace ObjectOrientedDesign
         }
         public TCPtoObject(string path, string eventpath)
         {
-            logpath = $"logs_{DateTime.Now.Day}_{DateTime.Now.Month}_{DateTime.Now.Year}.txt";
-            StreamWriter logWriter = new StreamWriter(logpath, append: true);
-            string s = $"App opened at {DateTime.Now.ToString("HH:mm:ss")}";
-            logWriter.WriteLine(s);
-            logWriter.Close();
-            lists = new ListsDatabase();
+            LogWriter.Write($"App opened at {DateTime.Now.ToString("HH:mm:ss")}");
+            lists = ListsDatabase.GetInstance();
             generators = new Dictionary<string, TCPGenerator>();
             generators.Add("NCR", new TCPCrewGenerator());
             generators.Add("NPA", new TCPPassengerGenerator());
@@ -212,17 +208,20 @@ namespace ObjectOrientedDesign
             {
                 List<Entity> entities = this.Generate();
                 Entity? found = entities.Find((x) => x.ID == e.ObjectID);
-                StreamWriter logWriter = new StreamWriter(logpath, append: true);
-                if (found != null)
+                Entity? found_bad = entities.Find((x) => x.ID == e.NewObjectID);
+                if (found != null && found_bad == null)
                 {
                     found.ChangeID(e, lists);
-                    logWriter.WriteLine($"Object old ID:{e.ObjectID} changed to {e.NewObjectID}");
+                    LogWriter.Write($"Object old ID:{e.ObjectID} changed to {e.NewObjectID}");
+                }
+                else if(found_bad != null)
+                {
+                    LogWriter.Write("ID already exists");
                 }
                 else
                 {
-                    logWriter.WriteLine($"Object with ID:{e.ObjectID} not found");
+                    LogWriter.Write($"Object with ID:{e.ObjectID} not found");
                 }
-                logWriter.Close();
             }
         }
         public void UpdatePosition(object sender, PositionUpdateArgs e)
@@ -231,14 +230,17 @@ namespace ObjectOrientedDesign
             {
                 List<Flight> flights = lists.flights;
                 Flight? found = flights.Find((x) => x.ID == e.ObjectID);
-                StreamWriter logWriter = new StreamWriter(logpath, append: true);
                 if (found != null)
                 {
                     found.AMSL = e.AMSL;
                     found.Latitude = e.Latitude;
                     found.Longitude = e.Longitude;
-                    logWriter.WriteLine($"Object with ID:{e.ObjectID} changed Lat:{e.Latitude}, Lon:{e.Longitude}, AMSL:{e.AMSL}");
-                    logWriter.Close();
+                    if (!HelperFunctions.IsOnMap(found))
+                    {
+                        LogWriter.Write($"Object with ID:{e.ObjectID} not on map");
+                        return;
+                    }
+                    LogWriter.Write($"Object with ID:{e.ObjectID} changed Lat:{e.Latitude}, Lon:{e.Longitude}, AMSL:{e.AMSL}");
                     return;
                 }
                 List<Airport> airports = lists.airports;
@@ -248,18 +250,15 @@ namespace ObjectOrientedDesign
                     foundairport.AMSL = e.AMSL;
                     foundairport.Latitude = e.Latitude;
                     foundairport.Longitude = e.Longitude;
-                    logWriter.WriteLine($"Object with ID:{e.ObjectID} changed Lat:{e.Latitude}, Lon:{e.Longitude}, AMSL:{e.AMSL}");
-                    logWriter.Close();
+                    LogWriter.Write($"Object with ID:{e.ObjectID} changed Lat:{e.Latitude}, Lon:{e.Longitude}, AMSL:{e.AMSL}");
                     return;
                 }
-                logWriter.WriteLine($"Object with ID {e.ObjectID} doeasn't exist or doesn't have position/AMSL");
-                logWriter.Close();
+                LogWriter.Write($"Object with ID {e.ObjectID} doeasn't exist or doesn't have position/AMSL");
             }
         }
 
         public void UpdateContactInfo(object sender, ContactInfoUpdateArgs e)
-        {
-            StreamWriter logWriter = new StreamWriter(logpath, append: true);
+        { 
             lock (lists)
             {
                 List<Person> people = new List<Person>();
@@ -270,13 +269,12 @@ namespace ObjectOrientedDesign
                 {
                     p.Email = e.EmailAddress;
                     p.Phone = e.PhoneNumber;
-                    logWriter.WriteLine($"Object with ID {e.ObjectID}: Email changed to {e.EmailAddress}, Phone changed to {e.PhoneNumber}");
+                    LogWriter.Write($"Object with ID {e.ObjectID}: Email changed to {e.EmailAddress}, Phone changed to {e.PhoneNumber}");
                 }
                 else
                 {
-                    logWriter.WriteLine($"Object with ID {e.ObjectID} doeasn't exist or doesn't have email/phone");
+                    LogWriter.Write($"Object with ID {e.ObjectID} doeasn't exist or doesn't have email/phone");
                 }
-                logWriter.Close();
             }
         }
     }
