@@ -124,7 +124,7 @@ namespace ObjectOrientedDesign
         }
 
 
-        public override List<Entity> Generate() // z tablicy bajtów robimy listę (serializacja w mainie)
+        public override List<Entity> Generate() 
         { 
             return lists.entities;
         }
@@ -211,7 +211,7 @@ namespace ObjectOrientedDesign
                 Entity? found_bad = entities.Find((x) => x.ID == e.NewObjectID);
                 if (found != null && found_bad == null)
                 {
-                    found.ChangeID(e, lists);
+                    found.Update("id", e.NewObjectID.ToString());
                     LogWriter.Write($"Object old ID:{e.ObjectID} changed to {e.NewObjectID}");
                 }
                 else if(found_bad != null)
@@ -232,14 +232,9 @@ namespace ObjectOrientedDesign
                 Flight? found = flights.Find((x) => x.ID == e.ObjectID);
                 if (found != null)
                 {
-                    found.AMSL = e.AMSL;
-                    found.Latitude = e.Latitude;
-                    found.Longitude = e.Longitude;
-                    if (!HelperFunctions.IsOnMap(found))
-                    {
-                        LogWriter.Write($"Object with ID:{e.ObjectID} not on map");
-                        return;
-                    }
+                    found.Update("amsl", e.AMSL.ToString());
+                    found.Update("worldposition.lat", e.Latitude.ToString());
+                    found.Update("worldposition.lon", e.Longitude.ToString());
                     LogWriter.Write($"Object with ID:{e.ObjectID} changed Lat:{e.Latitude}, Lon:{e.Longitude}, AMSL:{e.AMSL}");
                     return;
                 }
@@ -247,9 +242,9 @@ namespace ObjectOrientedDesign
                 Airport? foundairport = airports.Find((x) => x.ID == e.ObjectID);
                 if (foundairport != null)
                 {
-                    foundairport.AMSL = e.AMSL;
-                    foundairport.Latitude = e.Latitude;
-                    foundairport.Longitude = e.Longitude;
+                    foundairport.Update("amsl", e.AMSL.ToString());
+                    foundairport.Update("worldposition.lat", e.Latitude.ToString());
+                    foundairport.Update("worldposition.lon", e.Longitude.ToString());
                     LogWriter.Write($"Object with ID:{e.ObjectID} changed Lat:{e.Latitude}, Lon:{e.Longitude}, AMSL:{e.AMSL}");
                     return;
                 }
@@ -267,8 +262,8 @@ namespace ObjectOrientedDesign
                 Person? p = people.Find((x) => x.ID == e.ObjectID);
                 if (p != null)
                 {
-                    p.Email = e.EmailAddress;
-                    p.Phone = e.PhoneNumber;
+                    p.Update("email", e.EmailAddress.ToString());
+                    p.Update("phone", e.PhoneNumber.ToString());
                     LogWriter.Write($"Object with ID {e.ObjectID}: Email changed to {e.EmailAddress}, Phone changed to {e.PhoneNumber}");
                 }
                 else

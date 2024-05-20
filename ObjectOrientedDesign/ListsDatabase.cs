@@ -18,7 +18,6 @@ namespace ObjectOrientedDesign
         public List<Flight> flights = new List<Flight>();
         public List<Entity> entities = new List<Entity>();
         private static ListsDatabase instance;
-
         private ListsDatabase() 
         {
             airports = new List<Airport>();
@@ -29,6 +28,12 @@ namespace ObjectOrientedDesign
             passengers = new List<Passenger>();
             flights = new List<Flight>();
             entities = new List<Entity>();
+            instance = this;
+        }
+
+        public List<Airport> GetAirports()
+        {
+            return airports;
         }
         public static ListsDatabase GetInstance()
         {
@@ -38,5 +43,6 @@ namespace ObjectOrientedDesign
             }
             return instance;
         }
+
     }
 }

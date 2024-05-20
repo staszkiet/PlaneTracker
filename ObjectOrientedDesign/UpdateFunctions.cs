@@ -43,8 +43,8 @@ namespace ObjectOrientedDesign
                 double degrees;
                 var pos1 = SphericalMercator.FromLonLat(fl.Longitude, fl.Latitude);
                 var pos2 = SphericalMercator.FromLonLat(NewLongitude, NewLatitude);
-                fl.Latitude = NewLatitude;
-                fl.Longitude = NewLongitude;
+                fl.Update("worldposition.lat", NewLatitude.ToString());
+                fl.Update("worldposition.lon", NewLongitude.ToString());
                 degrees = Math.Atan2(pos2.x - pos1.x, pos2.y - pos1.y);
                 list.Add(new FlightAdapter(fl, NewLatitude, NewLongitude, degrees));
             }

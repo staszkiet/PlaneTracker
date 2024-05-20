@@ -45,9 +45,8 @@ namespace ObjectOrientedDesign
                     }
                 }
             }
-          
-        }
 
+        }
         public static bool IsOnMap(Flight fl)
         {
             long nowticks = DateTime.Now.Ticks;
@@ -77,6 +76,14 @@ namespace ObjectOrientedDesign
                 {
                     Task task = new Task(() => Report(parser));
                     task.Start();
+                }
+                else if(s.Length > 5)
+                {
+                    lock (ListsDatabase.GetInstance())
+                    {
+                        QueryManager qm = new QueryManager();
+                        qm.HandleQuery(s);
+                    }
                 }
             }
         }

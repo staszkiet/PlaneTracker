@@ -11,33 +11,80 @@ namespace ObjectOrientedDesign.Objects
 {
     public abstract class Person : Entity
     {
-        public string Name { get; init; }
-        public ulong Age { get; init; }
+        public string Name { get; private set; }
+        public ulong Age { get; private set; }
         public string Phone { get; set; }
         public string Email { get; set; }
+        public void UpdateName(string s)
+        {
+            this.Name = s;
+        }
+        public void UpdateAge(string s)
+        {
+            this.Age = ulong.Parse(s);
+        }
+        public void UpdatePhone(string s)
+        {
+            this.Phone = s;
+        }
+        public void UpdateEmail(string s)
+        {
+            this.Email = s;
+        }
 
-        protected Person(ulong iD, string name, ulong age, string phone, string email)
+        protected Person(ulong iD, string name, ulong age, string phone, string email): base()
         {
             ID = iD;
             Name = name;
             Age = age;
             Phone = phone;
             Email = email;
+            NameToType.Add("name", typeof(string));
+            NameToType.Add("age", typeof(ulong));
+            NameToType.Add("phone", typeof(string));
+            NameToType.Add("email", typeof(string));
+            NameToUpdateFunc.Add("name", UpdateName);
+            NameToUpdateFunc.Add("age", UpdateAge);
+            NameToUpdateFunc.Add("phone", UpdatePhone);
+            NameToUpdateFunc.Add("email", UpdateEmail);
+            NameToValue = new Dictionary<string, string>();
+            NameToValue.Add("id", this.ID.ToString());
+            NameToValue.Add("name", this.Name.ToString());
+            NameToValue.Add("age", this.Age.ToString());
+            NameToValue.Add("phone", this.Phone.ToString());
+            NameToValue.Add("email", this.Email.ToString());
         }
     }
 
     public class Crew : Person
     {
         [JsonPropertyOrder(1)]
-        public ushort Practice { get; init; }
+        public ushort Practice { get; private set; }
 
         [JsonPropertyOrder(1)]
-        public string Role { get; init; }
+        public string Role { get; private set; }
+
+        public void UpdateRole(string s)
+        {
+            this.Role = s;
+        }
+        public void UpdatePracitce(string s)
+        {
+            this.Practice = ushort.Parse(s);
+        }
+
 
         public Crew(ulong iD, string name, ulong age, string phone, string email, ushort Practice, string Role) : base(iD, name, age, phone, email)
         {
             this.Practice = Practice;
             this.Role = Role;
+            NameToType.Add("practise", typeof(ushort));
+            NameToType.Add("role", typeof(string));
+            NameToUpdateFunc.Add("practise", UpdatePracitce);
+            NameToUpdateFunc.Add("role", UpdateRole);
+            NameToUpdateFunc.Add("id", UpdateId);
+            NameToValue.Add("practise", this.Practice.ToString());
+            NameToValue.Add("role", this.Role.ToString());
         }
         public override void ChangeID(IDUpdateArgs e, ListsDatabase l)
         {
@@ -50,20 +97,71 @@ namespace ObjectOrientedDesign.Objects
             }
             this.ID = e.NewObjectID;
         }
+
+        public override void DeleteSelf()
+        {
+            ListsDatabase ld = ListsDatabase.GetInstance();
+            ld.crews.Remove(this);
+            ld.entities.Remove(this);
+        }
+        /*public override void CreateNameToValue()
+        {
+            NameToValue = new Dictionary<string, string>();
+            NameToValue.Add("id", this.ID.ToString());
+            NameToValue.Add("name", this.Name.ToString());
+            NameToValue.Add("age", this.Age.ToString());
+            NameToValue.Add("phone", this.Phone.ToString());
+            NameToValue.Add("email", this.Email.ToString());
+            NameToValue.Add("practise", this.Practice.ToString());
+            NameToValue.Add("role", this.Role.ToString());
+        }*/
     }
 
     public class Passenger : Person
     {
         [JsonPropertyOrder(1)]
-        public string Class { get; init; }
+        public string Class { get; private set; }
 
         [JsonPropertyOrder(1)]
-        public ulong Miles { get; init; }
+        public ulong Miles { get; private set; }
 
         public Passenger(ulong iD, string name, ulong age, string phone, string email, string Class, ulong Miles) : base(iD, name, age, phone, email)
         {
             this.Class = Class;
             this.Miles = Miles;
+            NameToType.Add("class", typeof(string));
+            NameToType.Add("miles", typeof(ulong));
+            NameToUpdateFunc.Add("class", UpdateClass);
+            NameToUpdateFunc.Add("miles", UpdateMiles);
+            NameToUpdateFunc.Add("id", UpdateId);
+            NameToValue.Add("class", this.Class.ToString());
+            NameToValue.Add("Miles", this.Miles.ToString());
         }
+
+        public void UpdateClass(string s)
+        {
+            this.Class = s;
+        }
+        public void UpdateMiles(string s)
+        {
+            this.Miles = ulong.Parse(s);
+        }
+        public override void DeleteSelf()
+        {
+            ListsDatabase ld = ListsDatabase.GetInstance();
+            ld.passengers.Remove(this);
+            ld.entities.Remove(this);
+        }
+       /* public override void CreateNameToValue()
+        {
+            NameToValue = new Dictionary<string, string>();
+            NameToValue.Add("id", this.ID.ToString());
+            NameToValue.Add("name", this.Name.ToString());
+            NameToValue.Add("age", this.Age.ToString());
+            NameToValue.Add("phone", this.Phone.ToString());
+            NameToValue.Add("email", this.Email.ToString());
+            NameToValue.Add("class", this.Class.ToString());
+            NameToValue.Add("Miles", this.Miles.ToString());
+        }*/
     }
 }

@@ -16,6 +16,8 @@ namespace ObjectOrientedDesign
     public abstract class Generator
     {
         public abstract void Generate(string[] s, ref ListsDatabase l);
+
+        public Dictionary<string, int> NameToIndex = new Dictionary<string, int>();
     }
     public class CrewGenerator : Generator
     {
@@ -65,13 +67,22 @@ namespace ObjectOrientedDesign
             l.cargos.Add(c);
             l.entities.Add(c);
         }
+
+        public CargoGenerator()
+        {
+            NameToIndex = new Dictionary<string, int>();
+            NameToIndex.Add("id", 1);
+            NameToIndex.Add("weight", 2);
+            NameToIndex.Add("code", 3);
+            NameToIndex.Add("description", 4);
+        }
     }
 
     public class CargoPlaneGenerator : Generator
     {
         public override void Generate(string[] s, ref ListsDatabase l)
         {
-            ulong ID = uint.Parse(s[1]);
+            ulong ID = ulong.Parse(s[1]);
             string Serial = s[2];
             string Country = s[3];
             string Model = s[4];
@@ -85,7 +96,7 @@ namespace ObjectOrientedDesign
     {
         public override void Generate(string[] s, ref ListsDatabase l)
         {
-            ulong ID = uint.Parse(s[1]);
+            ulong ID = ulong.Parse(s[1]);
             string Serial = s[2];
             string Country = s[3];
             string Model = s[4];
@@ -133,19 +144,25 @@ namespace ObjectOrientedDesign
             string[] LoadTab = s[11].Split(";");
             ulong[] Crew = new ulong[CrewTab.Length];
             ulong[] Load = new ulong[LoadTab.Length];
-            CrewTab[0] = CrewTab[0].Remove(0, 1);
-            CrewTab[CrewTab.Length - 1] = CrewTab[CrewTab.Length - 1].Remove(CrewTab[CrewTab.Length - 1].Length - 1, 1);
-            LoadTab[0] = LoadTab[0].Remove(0, 1);
-            LoadTab[LoadTab.Length - 1] = LoadTab[LoadTab.Length - 1].Remove(LoadTab[LoadTab.Length - 1].Length - 1, 1);
-
-            for (int i = 0; i < Crew.Length; i++)
+            if (CrewTab[0] != "0")
             {
-                Crew[i] = ulong.Parse(CrewTab[i]);
+                CrewTab[0] = CrewTab[0].Remove(0, 1);
+                CrewTab[CrewTab.Length - 1] = CrewTab[CrewTab.Length - 1].Remove(CrewTab[CrewTab.Length - 1].Length - 1, 1);
+                for (int i = 0; i < Crew.Length; i++)
+                {
+                    Crew[i] = ulong.Parse(CrewTab[i]);
+                }
             }
-            for (int i = 0; i < Load.Length; i++)
+            if (LoadTab[0] != "0")
             {
-                Load[i] = ulong.Parse(LoadTab[i]);
+                LoadTab[0] = LoadTab[0].Remove(0, 1);
+                LoadTab[LoadTab.Length - 1] = LoadTab[LoadTab.Length - 1].Remove(LoadTab[LoadTab.Length - 1].Length - 1, 1);
+                for (int i = 0; i < Load.Length; i++)
+                {
+                    Load[i] = ulong.Parse(LoadTab[i]);
+                }
             }
+           
             Flight f = new Flight(ID, Origin, Target, TakeoffTime, LandingTime, Longitude, Latitude, AMSL, PlaneID, Load, Crew);
             l.flights.Add(f);
             l.entities.Add(f);
