@@ -59,13 +59,17 @@ namespace ObjectOrientedDesign.Objects
             List<Flight> affectedfl = l.flights.FindAll((x) => (x.Target == this.ID));
             foreach (Flight f in affectedfl)
             {
-                f.UpdateTarget(s) // zmienic zeby nie przeszukiwał dwukrotnie
+                f.NameToValue["target.id"] = s;
+                f.NameToValue["target.lon"] = this.Longitude.ToString();
+                f.NameToValue["target.lat"] = this.Latitude.ToString();
             }
             affectedfl = new List<Flight>();
             affectedfl = l.flights.FindAll((x) => (x.Origin == this.ID));
             foreach (Flight f in affectedfl)
             {
-                f.UpdateOrigin(s);
+                f.NameToValue["origin.id"] = s;
+                f.NameToValue["origin.lon"] = this.Longitude.ToString();
+                f.NameToValue["origin.lat"] = this.Latitude.ToString();
             }
         }
         public void UpdateCountry(string s)

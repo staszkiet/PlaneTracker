@@ -103,6 +103,8 @@ namespace ObjectOrientedDesign.Objects
             {
                 this.Origin = id;
                 NameToValue["origin.id"] = s;
+                NameToValue["origin.lon"] = a.Longitude.ToString();
+                NameToValue["origin.lat"] = a.Latitude.ToString();
             }
         }
 
@@ -115,6 +117,8 @@ namespace ObjectOrientedDesign.Objects
             {
                 this.Target = id;
                 NameToValue["target.id"] = s;
+                NameToValue["target.lon"] = a.Longitude.ToString();
+                NameToValue["target.lat"] = a.Latitude.ToString();
             }
         }
 

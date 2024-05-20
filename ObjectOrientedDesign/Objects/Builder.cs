@@ -76,6 +76,10 @@ namespace ObjectOrientedDesign.Objects
 
         public override List<Entity> ImposeRestrictions(List<string> cmd, List<Entity> list)
         {
+            if (cmd[0] == "display") 
+            {
+                return list;
+            }
             bool[] if_satisfy_ands = new bool[list.Count];
             bool[] if_satisfy = new bool[list.Count];
             for (int i = 0; i < list.Count; i++)
@@ -219,10 +223,13 @@ namespace ObjectOrientedDesign.Objects
             CommandList.RemoveAt(0);
             List<Entity> ret = lists[CommandList[0]];
             CommandList.RemoveAt(0);
-            while (CommandList[0] != "where")
+            if (CommandList.Contains("where"))
             {
-                CommandList.Add(CommandList[0]);
-                CommandList.RemoveAt(0);
+                while (CommandList[0] != "where")
+                {
+                    CommandList.Add(CommandList[0]);
+                    CommandList.RemoveAt(0);
+                }
             }
             return ret;
         }
@@ -231,6 +238,10 @@ namespace ObjectOrientedDesign.Objects
         {
             bool[] if_satisfy_ands = new bool[list.Count];
             bool[] if_satisfy = new bool[list.Count];
+            if (cmd[0] != "where")
+            {
+                return list;
+            }
             for (int i = 0; i < list.Count; i++)
             {
                 if_satisfy_ands[i] = true;
@@ -323,6 +334,10 @@ namespace ObjectOrientedDesign.Objects
         {
             bool[] if_satisfy_ands = new bool[list.Count];
             bool[] if_satisfy = new bool[list.Count];
+            if (cmd.Count == 0)
+            {
+                return list;
+            }
             for (int i = 0; i < list.Count; i++)
             {
                 if_satisfy_ands[i] = true;

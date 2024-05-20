@@ -54,7 +54,11 @@ namespace ObjectOrientedDesign.Objects
             this.ID = e.NewObjectID;
             foreach (Flight f in affectedfl)
             {
-                f.UpdatePlane(e.NewObjectID.ToString());
+                f.NameToValue["plane"] = this.ToString();
+                f.NameToValue["plane.id"] = this.ID.ToString();
+                f.NameToValue["plane.serial"] = this.Serial.ToString();
+                f.NameToValue["plane.model"] = this.Model.ToString();
+                f.NameToValue["plane.countrycode"] = this.Country.ToString();
             }
         }
         public string? Serial { get; private set; }
