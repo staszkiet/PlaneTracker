@@ -89,17 +89,6 @@ namespace ObjectOrientedDesign.Objects
         {
             return visitor.PrintCargoPlaneInfo(this);
         }
-
-       /* public override void CreateNameToValue()
-        {
-            NameToValue = new Dictionary<string, string>();
-            NameToValue.Add("id", this.ID.ToString());
-            NameToValue.Add("serial", this.Serial.ToString());
-            NameToValue.Add("countrycode", this.Country.ToString());
-            NameToValue.Add("model", this.Model.ToString());
-            NameToValue.Add("maxload", this.MaxLoad.ToString());
-        }*/
-
         public override void DeleteSelf()
         {
             ListsDatabase ld = ListsDatabase.GetInstance();
@@ -139,7 +128,6 @@ namespace ObjectOrientedDesign.Objects
         {
             this.BusinessClassSize = ushort.Parse(s);
         }
-
         public void UpdateEconomyClassSize(string s)
         {
             this.EconomyClassSize = ushort.Parse(s);

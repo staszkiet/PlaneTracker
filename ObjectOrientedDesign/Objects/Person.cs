@@ -104,17 +104,6 @@ namespace ObjectOrientedDesign.Objects
             ld.crews.Remove(this);
             ld.entities.Remove(this);
         }
-        /*public override void CreateNameToValue()
-        {
-            NameToValue = new Dictionary<string, string>();
-            NameToValue.Add("id", this.ID.ToString());
-            NameToValue.Add("name", this.Name.ToString());
-            NameToValue.Add("age", this.Age.ToString());
-            NameToValue.Add("phone", this.Phone.ToString());
-            NameToValue.Add("email", this.Email.ToString());
-            NameToValue.Add("practise", this.Practice.ToString());
-            NameToValue.Add("role", this.Role.ToString());
-        }*/
     }
 
     public class Passenger : Person
@@ -152,16 +141,5 @@ namespace ObjectOrientedDesign.Objects
             ld.passengers.Remove(this);
             ld.entities.Remove(this);
         }
-       /* public override void CreateNameToValue()
-        {
-            NameToValue = new Dictionary<string, string>();
-            NameToValue.Add("id", this.ID.ToString());
-            NameToValue.Add("name", this.Name.ToString());
-            NameToValue.Add("age", this.Age.ToString());
-            NameToValue.Add("phone", this.Phone.ToString());
-            NameToValue.Add("email", this.Email.ToString());
-            NameToValue.Add("class", this.Class.ToString());
-            NameToValue.Add("Miles", this.Miles.ToString());
-        }*/
     }
 }

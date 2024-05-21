@@ -290,7 +290,7 @@ namespace ObjectOrientedDesign.Objects
             }
             return list;
         }
-        public override void Ultimate(List<string> cmd, List<Entity> list) // w kazdej klasie metody pozwalające na dostęp do jakiegoś elementu i zmiane go
+        public override void Ultimate(List<string> cmd, List<Entity> list)
         {
             cmd.RemoveAt(0);
             while (cmd.Count > 0)
@@ -325,7 +325,6 @@ namespace ObjectOrientedDesign.Objects
         {
             CommandList.RemoveAt(0);
             List<Entity> ret = lists[CommandList[0]];
-            //CommandList.Add(CommandList[0]);
             CommandList.RemoveAt(0);
             return ret;
         }
