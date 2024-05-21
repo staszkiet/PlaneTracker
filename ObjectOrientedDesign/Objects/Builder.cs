@@ -89,13 +89,9 @@ namespace ObjectOrientedDesign.Objects
             }
             while (true)
             {
-                cmd.RemoveAt(0);
                 do
                 {
-                    if (cmd[0] == "and")
-                    {
-                        cmd.RemoveAt(0);
-                    }
+                    cmd.RemoveAt(0);
                     for (int i = 0; i < list.Count; i++)
                     {
                         string val = list[i].NameToValue[cmd[0]];
@@ -249,13 +245,9 @@ namespace ObjectOrientedDesign.Objects
             }
             while (true)
             {
-                cmd.RemoveAt(0);
                 do
                 {
-                    if (cmd[0] == "and")
-                    {
-                        cmd.RemoveAt(0);
-                    }
+                    cmd.RemoveAt(0);
                     for (int i = 0; i < list.Count; i++)
                     {
                         string val = list[i].NameToValue[cmd[0]];
@@ -371,7 +363,7 @@ namespace ObjectOrientedDesign.Objects
                     if_satisfy[i] |= if_satisfy_ands[i];
                     if_satisfy_ands[i] = true;
                 }
-                if (cmd.Count == 1)
+                if (cmd.Count <= 1)
                 {
                     break;
                 }

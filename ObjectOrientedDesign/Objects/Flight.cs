@@ -46,6 +46,9 @@ namespace ObjectOrientedDesign.Objects
             NameToValue = new Dictionary<string, string>();
             NameToValue.Add("id", this.ID.ToString());
             NameToValue.Add("worldposition", "{" + this.Longitude.ToString() + ", " + this.Latitude.ToString() + "}");
+            NameToValue.Add("worldposition.lon", this.Longitude.ToString());
+            NameToValue.Add("worldposition.lat", this.Latitude.ToString());
+            NameToValue.Add("amsl", this.AMSL.ToString());
             if (TakeoffTime == "0")
             {
                 TakeoffTime = "0:00";
