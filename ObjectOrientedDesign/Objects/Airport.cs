@@ -28,12 +28,12 @@ namespace ObjectOrientedDesign.Objects
             this.Latitude = Latitude;
             this.AMSL = AMSL;
             this.Country = Country;
-            NameToType.Add("name", typeof(string));
-            NameToType.Add("code", typeof(string));
-            NameToType.Add("worldposition.lon", typeof(float));
-            NameToType.Add("worldposition.lan", typeof(float));
-            NameToType.Add("amsl", typeof(float));
-            NameToType.Add("countrycode", typeof(string));
+            NameToType.Add("name", "string");
+            NameToType.Add("code", "string");
+            NameToType.Add("worldposition.lon", "float");
+            NameToType.Add("worldposition.lan", "float");
+            NameToType.Add("amsl", "float");
+            NameToType.Add("countrycode", "string");
             NameToUpdateFunc.Add("name", UpdateName);
             NameToUpdateFunc.Add("code", UpdateCode);
             NameToUpdateFunc.Add("worldposition.lon", UpdateLon);

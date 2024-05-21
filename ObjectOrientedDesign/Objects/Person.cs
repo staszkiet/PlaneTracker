@@ -39,10 +39,10 @@ namespace ObjectOrientedDesign.Objects
             Age = age;
             Phone = phone;
             Email = email;
-            NameToType.Add("name", typeof(string));
-            NameToType.Add("age", typeof(ulong));
-            NameToType.Add("phone", typeof(string));
-            NameToType.Add("email", typeof(string));
+            NameToType.Add("name", "string");
+            NameToType.Add("age", "ulong");
+            NameToType.Add("phone", "string");
+            NameToType.Add("email", "string");
             NameToUpdateFunc.Add("name", UpdateName);
             NameToUpdateFunc.Add("age", UpdateAge);
             NameToUpdateFunc.Add("phone", UpdatePhone);
@@ -78,8 +78,8 @@ namespace ObjectOrientedDesign.Objects
         {
             this.Practice = Practice;
             this.Role = Role;
-            NameToType.Add("practise", typeof(ushort));
-            NameToType.Add("role", typeof(string));
+            NameToType.Add("practise", "ushort");
+            NameToType.Add("role", "string");
             NameToUpdateFunc.Add("practise", UpdatePracitce);
             NameToUpdateFunc.Add("role", UpdateRole);
             NameToUpdateFunc.Add("id", UpdateId);
@@ -129,8 +129,8 @@ namespace ObjectOrientedDesign.Objects
         {
             this.Class = Class;
             this.Miles = Miles;
-            NameToType.Add("class", typeof(string));
-            NameToType.Add("miles", typeof(ulong));
+            NameToType.Add("class", "string");
+            NameToType.Add("miles", "ulong");
             NameToUpdateFunc.Add("class", UpdateClass);
             NameToUpdateFunc.Add("miles", UpdateMiles);
             NameToUpdateFunc.Add("id", UpdateId);

@@ -99,7 +99,7 @@ namespace ObjectOrientedDesign.Objects
                     for (int i = 0; i < list.Count; i++)
                     {
                         string val = list[i].NameToValue[cmd[0]];
-                        Type t = list[i].NameToType[cmd[0]];
+                        string t = list[i].NameToType[cmd[0]];
                         Func<string, IComparable> f = list[i].TypeToParse[t];
                         IComparable v1 = f(val);
                         IComparable v2 = f(cmd[2]);
@@ -259,7 +259,7 @@ namespace ObjectOrientedDesign.Objects
                     for (int i = 0; i < list.Count; i++)
                     {
                         string val = list[i].NameToValue[cmd[0]];
-                        Type t = list[i].NameToType[cmd[0]];
+                        string t = list[i].NameToType[cmd[0]];
                         Func<string, IComparable> f = list[i].TypeToParse[t];
                         IComparable v1 = f(val);
                         IComparable v2 = f(cmd[2]);
@@ -325,7 +325,7 @@ namespace ObjectOrientedDesign.Objects
         {
             CommandList.RemoveAt(0);
             List<Entity> ret = lists[CommandList[0]];
-            CommandList.Add(CommandList[0]);
+            //CommandList.Add(CommandList[0]);
             CommandList.RemoveAt(0);
             return ret;
         }
@@ -355,7 +355,7 @@ namespace ObjectOrientedDesign.Objects
                     for (int i = 0; i < list.Count; i++)
                     {
                         string val = list[i].NameToValue[cmd[0]];
-                        Type t = list[i].NameToType[cmd[0]];
+                        string t = list[i].NameToType[cmd[0]];
                         Func<string, IComparable> f = list[i].TypeToParse[t];
                         IComparable v1 = f(val);
                         IComparable v2 = f(cmd[2]);

@@ -17,9 +17,9 @@ namespace ObjectOrientedDesign.Objects
             Serial = serial;
             Country = country;
             Model = model;
-            NameToType.Add("serial", typeof(string));
-            NameToType.Add("countrycode", typeof(string));
-            NameToType.Add("model", typeof(string));
+            NameToType.Add("serial", "string");
+            NameToType.Add("countrycode", "string");
+            NameToType.Add("model", "string");
             NameToUpdateFunc.Add("serial", UpdateSerial);
             NameToUpdateFunc.Add("countrycode", UpdateCountry);
             NameToUpdateFunc.Add("model", UpdateModel);
@@ -72,7 +72,7 @@ namespace ObjectOrientedDesign.Objects
         public CargoPlane(ulong ID, string Serial, string Country, string Model, float MaxLoad) : base(ID, Serial, Country, Model)
         {
             this.MaxLoad = MaxLoad;
-            NameToType.Add("maxload", typeof(float));
+            NameToType.Add("maxload", "float");
             NameToUpdateFunc.Add("maxload", UpdateMaxLoad);
             NameToValue.Add("maxload", this.MaxLoad.ToString());
         }
@@ -124,9 +124,9 @@ namespace ObjectOrientedDesign.Objects
             this.FirstClassSize = FirstClassSize;
             this.EconomyClassSize = EconomyClassSize;
             this.BusinessClassSize = BusinessClassSize;
-            NameToType.Add("firstclasssize", typeof(ushort));
-            NameToType.Add("businessclasssize", typeof(ushort));
-            NameToType.Add("economyclasssize", typeof(ushort));
+            NameToType.Add("firstclasssize", "ushort");
+            NameToType.Add("businessclasssize", "ushort");
+            NameToType.Add("economyclasssize", "ushort");
             NameToUpdateFunc.Add("firstclasssize", UpdateFirstClassSize);
             NameToUpdateFunc.Add("businessclasssize", UpdateBusinessClassSize);
             NameToUpdateFunc.Add("economyclasssize", UpdateEconomyClassSize);
@@ -159,17 +159,5 @@ namespace ObjectOrientedDesign.Objects
             ld.passengerPlanes.Remove(this);
             ld.entities.Remove(this);
         }
-
-       /* public override void CreateNameToValue()
-        {
-            NameToValue = new Dictionary<string, string>();
-            NameToValue.Add("id", this.ID.ToString());
-            NameToValue.Add("serial", this.Serial.ToString());
-            NameToValue.Add("countrycode", this.Country.ToString());
-            NameToValue.Add("model", this.Model.ToString());
-            NameToValue.Add("firstclasssize", this.FirstClassSize.ToString());
-            NameToValue.Add("businessclasssize", this.BusinessClassSize.ToString());
-            NameToValue.Add("economyclasssize", this.EconomyClassSize.ToString());
-        }*/
     }
 }

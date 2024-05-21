@@ -34,7 +34,16 @@ namespace ObjectOrientedDesign
             l.crews.Add(c);
             l.entities.Add(c);
         }
-
+        public CrewGenerator()
+        {
+            NameToIndex.Add("id", 1);
+            NameToIndex.Add("name", 2);
+            NameToIndex.Add("age", 3);
+            NameToIndex.Add("phone", 4);
+            NameToIndex.Add("email", 5);
+            NameToIndex.Add("practise", 6);
+            NameToIndex.Add("role", 7);
+        }
     }
 
     public class PassengerGenerator : Generator
@@ -52,7 +61,16 @@ namespace ObjectOrientedDesign
             l.passengers.Add(p);
             l.entities.Add(p);
         }
-
+        public PassengerGenerator()
+        {
+            NameToIndex.Add("id", 1);
+            NameToIndex.Add("name", 2);
+            NameToIndex.Add("age", 3);
+            NameToIndex.Add("phone", 4);
+            NameToIndex.Add("email", 5);
+            NameToIndex.Add("class", 6);
+            NameToIndex.Add("miles", 7);
+        }
     }
 
     public class CargoGenerator : Generator
@@ -91,6 +109,15 @@ namespace ObjectOrientedDesign
             l.cargoPlanes.Add(cp);
             l.entities.Add(cp);
         }
+
+        public CargoPlaneGenerator()
+        {
+            NameToIndex.Add("id", 1);
+            NameToIndex.Add("serial", 2);
+            NameToIndex.Add("country", 3);
+            NameToIndex.Add("model", 4);
+            NameToIndex.Add("maxload", 5);
+        }
     }
     public class PassengerPlaneGenerator : Generator
     {
@@ -108,6 +135,17 @@ namespace ObjectOrientedDesign
             l.entities.Add(pp);
 
         }
+
+        public PassengerPlaneGenerator()
+        {
+            NameToIndex.Add("id", 1);
+            NameToIndex.Add("serial", 2);
+            NameToIndex.Add("country", 3);
+            NameToIndex.Add("model", 4);
+            NameToIndex.Add("firstclasssize", 5);
+            NameToIndex.Add("businessclasssize", 6);
+            NameToIndex.Add("economyclasssize", 7);
+        }
     }
 
     public class AirportGenerator : Generator
@@ -124,6 +162,17 @@ namespace ObjectOrientedDesign
             Airport a = new Airport(ID, Name, Code, Longitude, Latitude, AMSL, Country);
             l.airports.Add(a);
             l.entities.Add(a);
+        }
+
+        public AirportGenerator()
+        {
+            NameToIndex.Add("id", 1);
+            NameToIndex.Add("name", 2);
+            NameToIndex.Add("code", 3);
+            NameToIndex.Add("worldposition.lon", 4);
+            NameToIndex.Add("worldposition.lat", 5);
+            NameToIndex.Add("amsl", 6);
+            NameToIndex.Add("country", 7);
         }
     }
 
@@ -162,10 +211,23 @@ namespace ObjectOrientedDesign
                     Load[i] = ulong.Parse(LoadTab[i]);
                 }
             }
-           
+            
             Flight f = new Flight(ID, Origin, Target, TakeoffTime, LandingTime, Longitude, Latitude, AMSL, PlaneID, Load, Crew);
             l.flights.Add(f);
             l.entities.Add(f);
         }
+        public FlightGenerator()
+        {
+            NameToIndex.Add("id", 1);
+            NameToIndex.Add("origin.id", 2);
+            NameToIndex.Add("target.id", 3);
+            NameToIndex.Add("takeofftime", 4);
+            NameToIndex.Add("landingtime", 5);
+            NameToIndex.Add("worldposition.lon", 6);
+            NameToIndex.Add("worldposition.lat", 7);
+            NameToIndex.Add("amsl", 8);
+            NameToIndex.Add("plane.id", 9);
+        }
+
     }
 }

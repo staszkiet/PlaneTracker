@@ -25,9 +25,9 @@ namespace ObjectOrientedDesign.Objects
             Weight = weight;
             Code = code;
             Description = description;
-            NameToType.Add("weight", typeof(float));
-            NameToType.Add("code", typeof(string));
-            NameToType.Add("description", typeof(string));
+            NameToType.Add("weight", "float");
+            NameToType.Add("code", "string");
+            NameToType.Add("description", "string");
             NameToUpdateFunc.Add("weight", UpdateWeight);
             NameToUpdateFunc.Add("description", UpdateDesc);
             NameToUpdateFunc.Add("code", UpdateCode);
@@ -38,15 +38,6 @@ namespace ObjectOrientedDesign.Objects
             NameToValue.Add("code", this.Code.ToString());
             NameToValue.Add("description", this.Description.ToString());
         }
-
-        /*public override void CreateNameToValue()
-        {
-            NameToValue = new Dictionary<string, string>();
-            NameToValue.Add("id", this.ID.ToString());
-            NameToValue.Add("weight", this.Weight.ToString());
-            NameToValue.Add("code", this.Code.ToString());
-            NameToValue.Add("description", this.Description.ToString());
-        }*/
         public override void ChangeID(IDUpdateArgs e, ListsDatabase l)
         {
             List<Flight> fl = l.flights;

@@ -34,20 +34,28 @@ namespace ObjectOrientedDesign.Objects
             PlaneID = planeID;
             Crew = crew;
             Load = load;
-            NameToType.Add("origin.lon", typeof(float));
-            NameToType.Add("target.lat", typeof(float));
-            NameToType.Add("origin.lat", typeof(float));
-            NameToType.Add("target.lon", typeof(float));
-            NameToType.Add("takeofftime", typeof(string));
-            NameToType.Add("landingtime", typeof(string));
-            NameToType.Add("worldposition.lon", typeof(float));
-            NameToType.Add("worldposition.lat", typeof(float));
-            NameToType.Add("amsl", typeof(float));
+            NameToType.Add("origin.lon","float");
+            NameToType.Add("target.lat", "float");
+            NameToType.Add("origin.lat", "float");
+            NameToType.Add("target.lon", "float");
+            NameToType.Add("takeofftime", "string");
+            NameToType.Add("landingtime", "string");
+            NameToType.Add("worldposition.lon", "float");
+            NameToType.Add("worldposition.lat", "float");
+            NameToType.Add("amsl", "float");
             NameToValue = new Dictionary<string, string>();
             NameToValue.Add("id", this.ID.ToString());
             NameToValue.Add("worldposition", "{" + this.Longitude.ToString() + ", " + this.Latitude.ToString() + "}");
+            if (TakeoffTime == "0")
+            {
+                TakeoffTime = "0:00";
+            }
             DateTime tkf = DateTime.Parse(TakeoffTime);
             NameToValue.Add("takeofftime", tkf.ToString());
+            if (LandingTime == "0")
+            {
+                LandingTime = "0:00";
+            }
             DateTime lnt = DateTime.Parse(LandingTime);
             if (tkf > lnt)
             {
@@ -78,11 +86,18 @@ namespace ObjectOrientedDesign.Objects
             {
                 p = db.cargoPlanes.Find((x) => x.ID == this.PlaneID);
             }
-            NameToValue.Add("plane", p.ToString());
-            NameToValue.Add("plane.id", p.ID.ToString());
-            NameToValue.Add("plane.serial", p.Serial.ToString());
-            NameToValue.Add("plane.model", p.Model.ToString());
-            NameToValue.Add("plane.countrycode", p.Country.ToString());
+            if (p == null)
+            {
+                NameToValue.Add("plane", "invaid");
+            }
+            else
+            {
+                NameToValue.Add("plane", p.ToString());
+                NameToValue.Add("plane.id", p.ID.ToString());
+                NameToValue.Add("plane.serial", p.Serial.ToString());
+                NameToValue.Add("plane.model", p.Model.ToString());
+                NameToValue.Add("plane.countrycode", p.Country.ToString());
+            }
             NameToUpdateFunc.Add("origin.id", UpdateOrigin);
             NameToUpdateFunc.Add("target.id", UpdateTarget);
             NameToUpdateFunc.Add("takeofftime", UpdateTakeOffTime);

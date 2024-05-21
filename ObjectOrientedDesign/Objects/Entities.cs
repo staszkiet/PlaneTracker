@@ -42,9 +42,9 @@ namespace ObjectOrientedDesign.Objects
             ret += "}";
             return ret;
         }
-        public Dictionary<string, Type> NameToType;
+        public Dictionary<string, string> NameToType;
         public Dictionary<string, string> NameToValue;
-        public Dictionary<Type, Func<string, IComparable>> TypeToParse;
+        public Dictionary<string, Func<string, IComparable>> TypeToParse;
         public Dictionary<string, Func<IComparable, IComparable, bool>> SignToFunc;
         public Dictionary<string, object> NameToObject;
         public Dictionary<string, Action<string>> NameToUpdateFunc;
@@ -136,13 +136,13 @@ namespace ObjectOrientedDesign.Objects
             SignToFunc.Add("=", Equal);
             SignToFunc.Add(">=", MoreOrEqual);
             SignToFunc.Add("<=", LessOrEqual);
-            NameToType = new Dictionary<string, Type>();
-            NameToType.Add("id", typeof(ulong));
-            TypeToParse = new Dictionary<Type, Func<string, IComparable>>();
-            TypeToParse.Add(typeof(ulong), UlongParse);
-            TypeToParse.Add(typeof(ushort), UshortParse);
-            TypeToParse.Add(typeof(float), FloatParse);
-            TypeToParse.Add(typeof(string), StringParse);
+            NameToType = new Dictionary<string, string>();
+            NameToType.Add("id", "ulong");
+            TypeToParse = new Dictionary<string, Func<string, IComparable>>();
+            TypeToParse.Add("ulong", UlongParse);
+            TypeToParse.Add("ushort", UshortParse);
+            TypeToParse.Add("float", FloatParse);
+            TypeToParse.Add("string", StringParse);
             NameToUpdateFunc = new Dictionary<string, Action<string>>();
         }
     }
