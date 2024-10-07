@@ -172,7 +172,7 @@ namespace ObjectOrientedDesign
             NameToIndex.Add("worldposition.lon", 4);
             NameToIndex.Add("worldposition.lat", 5);
             NameToIndex.Add("amsl", 6);
-            NameToIndex.Add("country", 7);
+            NameToIndex.Add("countrycode", 7);
         }
     }
 
