@@ -12,7 +12,7 @@ The command "exit" saves the data and closes the app.
 The "report" command shows info on the state of some objects provided by several "medias" included in the program
 
 ## Data manipulation:
-User can manipulate data by inserting SQL-like commands into the command line
+User can manipulate data by inserting SQL-like commands into the command line  
 **displaying objects:**  
 dispay {object fields of * for all object fields} from {object class} [where {conditions}]  
 example: display ID, TakeoffTime, WorldPosition from Flights where ID > 10 and ID < 20  
